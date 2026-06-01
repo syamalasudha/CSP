@@ -1,0 +1,6 @@
+{
+  "name": "Vendra Gram Panchayat",
+  "description": "Digital portal for Vendra Gram Panchayat displaying administration, welfare, directory, statistics, and admin tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

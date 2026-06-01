@@ -1,0 +1,187 @@
+{
+  "stats": {
+    "population": 3115,
+    "areaSqKm": 5.72,
+    "totalWards": 12,
+    "totalHouseholds": 1109
+  },
+  "officials": [
+    {
+      "designation": "Sarpanch",
+      "name": "Sri Kosuri Srinivas",
+      "contact": "9866217870"
+    },
+    {
+      "designation": "Vice Sarpanch",
+      "name": "Sri Achanta Trimurthulu",
+      "contact": "9866302012"
+    },
+    {
+      "designation": "Panchayat Secretary",
+      "name": "Sri S. Veera Swamy",
+      "contact": "9573930799"
+    }
+  ],
+  "wardMembers": [
+    { "ward": 1, "name": "Mandapalli Samuel", "contact": "7671995564" },
+    { "ward": 2, "name": "Dara Prasanthi Kumari", "contact": "9676870395" },
+    { "ward": 3, "name": "Narla Veera Venkata Satyanarayanamma", "contact": "6303933194" },
+    { "ward": 4, "name": "Kosuri Satish", "contact": "9666162220" },
+    { "ward": 5, "name": "Patnidi Suryakumari", "contact": "9949461471" },
+    { "ward": 6, "name": "Achanta Srinivasu", "contact": "9866302012" },
+    { "ward": 7, "name": "Pepakayala Suryanarayana", "contact": "9849005009" },
+    { "ward": 8, "name": "Narla Veera Venkata Satyanarayana", "contact": "8466050666" },
+    { "ward": 9, "name": "Narla Satyavani", "contact": "9010021845" },
+    { "ward": 10, "name": "Oduri Lakshmi", "contact": "9704435035" },
+    { "ward": 11, "name": "Kosuri Srinivas", "contact": "9866217870" },
+    { "ward": 12, "name": "Kondepudi Kanakadurga", "contact": "9866733571" }
+  ],
+  "voters": {
+    "totalPollingStations": 2,
+    "maleVoters": 1113,
+    "femaleVoters": 1074,
+    "bcVoters": 180,
+    "scVoters": 650,
+    "stVoters": 8,
+    "totalVoters": 2187
+  },
+  "staff": [
+    { "id": "staff-1", "name": "Sunkara Veera Swamy", "designation": "PS GR-4", "contact": "9573930799", "department": "Sachivalayam" },
+    { "id": "staff-2", "name": "Lanka Kumar", "designation": "VRO Revenue", "contact": "8463933022", "department": "Sachivalayam" },
+    { "id": "staff-3", "name": "Valluri Pradeep", "designation": "Digital Assistant", "contact": "9059088500", "department": "Sachivalayam" },
+    { "id": "staff-4", "name": "Dekka Krishna", "designation": "Welfare and Education Assistant", "contact": "9959975222", "department": "Sachivalayam" },
+    { "id": "staff-5", "name": "Thotakura Durgaprasad", "designation": "Engineering Assistant", "contact": "9158375666", "department": "Sachivalayam" },
+    { "id": "staff-6", "name": "Gude Lavanya", "designation": "Mahila Police", "contact": "8328527306", "department": "Sachivalayam" },
+    { "id": "staff-7", "name": "Ogireddy Santhoshi", "designation": "Village Surveyor", "contact": "8520999228", "department": "Sachivalayam" },
+    { "id": "staff-8", "name": "Elipey Gnana Bhushan", "designation": "Agricultural Assistant", "contact": "7780712133", "department": "Sachivalayam" },
+    { "id": "staff-9", "name": "Nandam Satish", "designation": "Veterinary Assistant", "contact": "9705308963", "department": "Sachivalayam" },
+    { "id": "staff-10", "name": "Katta Prasad", "designation": "Energy Assistant", "contact": "9949365491", "department": "Sachivalayam" },
+    { "id": "staff-11", "name": "P Saradha", "designation": "Anganwadi Worker GR-1", "contact": "9121126049", "department": "Anganwadi" },
+    { "id": "staff-12", "name": "P Rathnam", "designation": "Anganwadi Worker GR-2", "contact": "9121126133", "department": "Anganwadi" },
+    { "id": "staff-13", "name": "K Ramalaxmi", "designation": "Anganwadi Worker GR-3", "contact": "9121126051", "department": "Anganwadi" },
+    { "id": "staff-14", "name": "CH Surya Kumari", "designation": "Anganwadi Worker GR-4", "contact": "9121126043", "department": "Anganwadi" },
+    { "id": "staff-15", "name": "Lingam Murali", "designation": "VOA Member 1", "contact": "8977989546", "department": "VOA" },
+    { "id": "staff-16", "name": "K Jagadeeshwari", "designation": "VOA Member 2", "contact": "9989630378", "department": "VOA" },
+    { "id": "staff-17", "name": "Satya Malasri", "designation": "VOA Member 3", "contact": "9666242558", "department": "VOA" }
+  ],
+  "land": {
+    "totalAayakattuAcres": 1413.58,
+    "wetLandAcres": 1236.38,
+    "dryLandAcres": 2.0,
+    "porambokuAcres": 150.0,
+    "fisheriesAcres": 15.75,
+    "assignedAcres": 6.0,
+    "endowmentsAcres": 40.0,
+    "totalSurveyNumbers": 324,
+    "totalKhathas": 950
+  },
+  "education": {
+    "govtSchools": 3,
+    "highSchools": 1,
+    "anganwadiCenters": 4
+  },
+  "health": {
+    "hasWellnessCentre": true,
+    "ashaWorkers": 3,
+    "anms": 1,
+    "swpcSheds": 1,
+    "clapmitras": 3,
+    "sweepers": 3,
+    "tricycles": 3
+  },
+  "water": {
+    "source": "Bore Well Near Chithapalli",
+    "overheadTankLitres": 120000,
+    "supplyPerHeadLitresDay": 55,
+    "publicTaps": 55,
+    "privateTaps": 740
+  },
+  "ration": {
+    "fairPriceShops": 1,
+    "riceCards": 1013
+  },
+  "shg": {
+    "totalGroups": 85,
+    "groupsWithBankLoans": 85,
+    "totalLoanAmountLakhs": 54.96
+  },
+  "pensions": {
+    "oap": 203,
+    "disabled": 50,
+    "widow": 130,
+    "tTappers": 7,
+    "singleWomen": 2,
+    "dmho": 5,
+    "artists": 28,
+    "abh": 11,
+    "cobbler": 5,
+    "total": 393
+  },
+  "infrastructure": {
+    "ledStreetLights": 240,
+    "ccmsBoxes": 3
+  },
+  "announcements": [
+    {
+      "id": "ann-1",
+      "title": "Jal Jeevan Mission: Safe Water Supply Initiated",
+      "content": "Our public borewell filtration near Chithapalli is now serving 55 litres per day per capita across all wards. Overhead tank maintenance is complete.",
+      "date": "2026-05-28",
+      "category": "General"
+    },
+    {
+      "id": "ann-2",
+      "title": "YSR Pension Kanuka Distribution Special Drive",
+      "content": "Pensions for all 393 beneficiaries (including OAP, single women, disabled and senior artists) will be distributed at doorstep on 1st June starting 6 AM.",
+      "date": "2026-05-30",
+      "category": "Welfare"
+    },
+    {
+      "id": "ann-3",
+      "title": "Agricultural Guidance & Crop Sowing Workshop",
+      "content": "Special session scheduled with Agri assistant Sri Elipey Gnana Bhushan for sowing crops on wet land (1236.38 acres) and organic guidelines.",
+      "date": "2026-06-03",
+      "category": "Meeting"
+    },
+    {
+      "id": "ann-4",
+      "title": "Special Health Campaign at local Wellness Centre",
+      "content": "A wellness campaign focusing on seasonal fevers, vaccinations, with full attendance of local ANMs and Asha workers. Free medicines provided.",
+      "date": "2026-06-05",
+      "category": "Alert"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "title": "Vendra Panchayat Sachivalayam Building",
+      "category": "Admin",
+      "imageUrl": "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      "id": "gal-2",
+      "title": "Verdant Sowing Fields of Vendra",
+      "category": "Agriculture",
+      "imageUrl": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      "id": "gal-3",
+      "title": "Anganwadi Centers Early Education Program",
+      "category": "Schools",
+      "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      "id": "gal-4",
+      "title": "CC-Road and LED Street Light Installations",
+      "category": "Infrastructure",
+      "imageUrl": "https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      "id": "gal-5",
+      "title": "Annual Gram Sabha and Community Gathering",
+      "category": "Events",
+      "imageUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800"
+    }
+  ],
+  "messages": []
+}
