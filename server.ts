@@ -15,7 +15,11 @@ const JWT_SECRET = process.env.JWT_SECRET || "vendra_secret_key_2026_govt_portal
 const DB_PATH = path.join(process.cwd(), "db.json");
 
 // Default password 'password123' bcrypt hash: $2a$10$vI8n.b9fM79WkIAncpx1yOrSgR5rYwI12pBe8cE7b7Gq6D35uY5j6
-const DEFAULT_ADMIN_HASH = "$2a$10$vI8n.b9fM79WkIAncpx1yOrSgR5rYwI12pBe8cE7b7Gq6D35uY5j6";
+//const DEFAULT_ADMIN_HASH = "$2a$10$vI8n.b9fM79WkIAncpx1yOrSgR5rYwI12pBe8cE7b7Gq6D35uY5j6";
+//const DEFAULT_ADMIN_HASH =
+ // "$2b$10$KbQiNqD3M6Qj9lY7K9p4VOVQxj4W5YvM9H6d8k8mQ0Y5X8xg8bM4K";
+ const DEFAULT_ADMIN_HASH =
+  bcryptjs.hashSync("password123", 10);
 
 function readDB() {
   try {
