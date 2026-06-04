@@ -72,8 +72,9 @@ export default function App() {
       if (!res.ok) throw new Error("Could not fetch database records.");
       const d = await res.json();
       setPortalData(d);
-    } catch (err: any) {
-      addToast("error", err.message || "Failed loading council records. Check Express backend connectivity.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed loading council records. Check Express backend connectivity.";
+      addToast("error", message);
     } finally {
       setLoading(false);
     }

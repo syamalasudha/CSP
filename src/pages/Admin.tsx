@@ -24,7 +24,9 @@ import {
   ArrowUpRight,
   ShieldCheck,
   AlertTriangle,
-  LockKeyhole
+  LockKeyhole,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { DatabaseSchema, StaffMember, Announcement, GalleryItem, ContactMessage } from "../types";
 
@@ -50,6 +52,7 @@ export const Admin: React.FC<AdminProps> = ({
   // Login credentials state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
   // Dashboard Tab state
@@ -119,8 +122,9 @@ export const Admin: React.FC<AdminProps> = ({
       const block = await res.json();
       onLoginSuccess(block.token);
       onToastSuccess(language === "te" ? "ధృవీకరణ పూర్తయింది. సుస్వాగతం." : "Access Authorized. Welcome back, Admin.");
-    } catch (err: any) {
-      onToastError(err.message || (language === "te" ? "లాగిన్ సమయంలో లోపం తలెత్తింది." : "An authentication dispute occurred."));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      onToastError(message || (language === "te" ? "లాగిన్ సమయంలో లోపం తలెత్తింది." : "An authentication dispute occurred."));
     } finally {
       setLoginLoading(false);
     }
@@ -194,8 +198,9 @@ export const Admin: React.FC<AdminProps> = ({
       onToastSuccess(language === "te" ? `ఉద్యోగి '${newStaff.name}' విజయవంతంగా చేర్చబడ్డారు!` : `Staff member '${newStaff.name}' successfully added!`);
       setNewStaff({ name: "", designation: "", contact: "", department: "Sachivalayam" });
       onRefreshData();
-    } catch (err: any) {
-      onToastError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Error saving staff member.";
+      onToastError(message);
     } finally {
       setActionLoading(false);
     }
@@ -241,8 +246,9 @@ export const Admin: React.FC<AdminProps> = ({
       onToastSuccess(language === "te" ? "ప్రకటన విజయవంతంగా వార్తా విభాగంలో ప్రచురించబడింది!" : `Announcement successfully pinned into public news desk!`);
       setNewAnn({ title: "", content: "", category: "General" });
       onRefreshData();
-    } catch (err: any) {
-      onToastError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Error publishing announcement.";
+      onToastError(message);
     } finally {
       setActionLoading(false);
     }
@@ -288,8 +294,9 @@ export const Admin: React.FC<AdminProps> = ({
       onToastSuccess(language === "te" ? "చిత్రం విజయవంతంగా ఆల్బమ్‌లో చేర్చబడింది!" : "Gallery photography successfully posted!");
       setNewGal({ title: "", category: "Infrastructure", imageUrl: "" });
       onRefreshData();
-    } catch (err: any) {
-      onToastError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Error adding photo.";
+      onToastError(message);
     } finally {
       setActionLoading(false);
     }
@@ -386,13 +393,24 @@ export const Admin: React.FC<AdminProps> = ({
               <label className="font-bold text-slate-650 dark:text-slate-400 uppercase">
                 {language === "te" ? "పాస్‌వర్డ్" : "Password"}
               </label>
-              <input
-                type="password"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full px-4 py-2.5 pr-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-500 transition cursor-pointer"
+                  tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
             <button

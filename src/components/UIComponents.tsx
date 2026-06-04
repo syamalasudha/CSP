@@ -12,7 +12,8 @@ export const AnimatedCounter: React.FC<{
   duration?: number;
   suffix?: string;
   prefix?: string;
-}> = ({ end, duration = 1200, suffix = "", prefix = "" }) => {
+  decimal?: boolean;
+}> = ({ end, duration = 1200, suffix = "", prefix = "", decimal = false }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export const AnimatedCounter: React.FC<{
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      setCount(Math.floor(progress * end));
+      setCount(progress * end);
       if (progress < 1) {
         window.requestAnimationFrame(step);
       }
@@ -28,10 +29,14 @@ export const AnimatedCounter: React.FC<{
     window.requestAnimationFrame(step);
   }, [end, duration]);
 
+  const formattedCount = decimal
+    ? count.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : Math.floor(count).toLocaleString();
+
   return (
     <span className="font-display font-bold tabular-nums">
       {prefix}
-      {count.toLocaleString()}
+      {formattedCount}
       {suffix}
     </span>
   );

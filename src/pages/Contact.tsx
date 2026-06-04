@@ -49,8 +49,9 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigate
       setSubmitted(true);
       onSuccess(language === "te" ? "ఫిర్యాదు / సమస్య సచివాలయ రిజిస్ట్రీలో విజయవంతంగా దాఖలు చేయబడింది!" : "Complaint / Query lodged successfully in public secretariat!");
       setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (err: any) {
-      onError(err.message || (language === "te" ? "సమర్పణ సమయంలో ఏదో పొరపాటు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి." : "Something went wrong during submission. Please try again."));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : (language === "te" ? "సమర్పణ సమయంలో ఏదో పొరపాటు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి." : "Something went wrong during submission. Please try again.");
+      onError(message);
     } finally {
       setLoading(false);
     }

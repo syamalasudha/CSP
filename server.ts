@@ -9,33 +9,30 @@ import fs from "fs";
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 import { createServer as createViteServer } from "vite";
+import { DatabaseSchema } from "./src/types";
 
 const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "vendra_secret_key_2026_govt_portal";
 const DB_PATH = path.join(process.cwd(), "db.json");
 
-// Default password 'password123' bcrypt hash: $2a$10$vI8n.b9fM79WkIAncpx1yOrSgR5rYwI12pBe8cE7b7Gq6D35uY5j6
-//const DEFAULT_ADMIN_HASH = "$2a$10$vI8n.b9fM79WkIAncpx1yOrSgR5rYwI12pBe8cE7b7Gq6D35uY5j6";
-//const DEFAULT_ADMIN_HASH =
- // "$2b$10$KbQiNqD3M6Qj9lY7K9p4VOVQxj4W5YvM9H6d8k8mQ0Y5X8xg8bM4K";
- const DEFAULT_ADMIN_HASH =
-  bcryptjs.hashSync("password123", 10);
+// Default password 'password123' bcrypt hash: $2b$10$rI75Oi7p.NPtLg2/mLos5eTv1CpMQjMc34MIAnUNOeo.1DdZy3CDi
+const DEFAULT_ADMIN_HASH = "$2b$10$rI75Oi7p.NPtLg2/mLos5eTv1CpMQjMc34MIAnUNOeo.1DdZy3CDi";
 
-function readDB() {
+function readDB(): DatabaseSchema {
   try {
     if (!fs.existsSync(DB_PATH)) {
       console.error("Database file missing, creating empty one.");
-      return {};
+      return {} as DatabaseSchema;
     }
     const data = fs.readFileSync(DB_PATH, "utf8");
-    return JSON.parse(data);
+    return JSON.parse(data) as DatabaseSchema;
   } catch (err) {
     console.error("Error reading database", err);
-    return {};
+    return {} as DatabaseSchema;
   }
 }
 
-function writeDB(data: any) {
+function writeDB(data: DatabaseSchema) {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf8");
     return true;
@@ -84,12 +81,12 @@ async function startServer() {
       return;
     }
 
-    jsonwebtoken.verify(token, JWT_SECRET, (err: any, user: any) => {
+    jsonwebtoken.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
         res.status(403).json({ error: "Invalid or expired token" });
         return;
       }
-      (req as any).user = user;
+      (req as any).user = decoded;
       next();
     });
   };
@@ -171,7 +168,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.staff = db.staff || [];
-    const index = db.staff.findIndex((s: any) => s.id === id);
+    const index = db.staff.findIndex((s) => s.id === id);
 
     if (index === -1) {
       res.status(404).json({ error: "Staff member not found" });
@@ -194,7 +191,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.staff = db.staff || [];
-    const filtered = db.staff.filter((s: any) => s.id !== id);
+    const filtered = db.staff.filter((s) => s.id !== id);
 
     if (filtered.length === db.staff.length) {
       res.status(404).json({ error: "Staff member not found" });
@@ -232,7 +229,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.announcements = db.announcements || [];
-    const index = db.announcements.findIndex((a: any) => a.id === id);
+    const index = db.announcements.findIndex((a) => a.id === id);
 
     if (index === -1) {
       res.status(404).json({ error: "Announcement not found" });
@@ -255,7 +252,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.announcements = db.announcements || [];
-    const filtered = db.announcements.filter((a: any) => a.id !== id);
+    const filtered = db.announcements.filter((a) => a.id !== id);
 
     if (filtered.length === db.announcements.length) {
       res.status(404).json({ error: "Announcement not found" });
@@ -292,7 +289,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.gallery = db.gallery || [];
-    const filtered = db.gallery.filter((g: any) => g.id !== id);
+    const filtered = db.gallery.filter((g) => g.id !== id);
 
     if (filtered.length === db.gallery.length) {
       res.status(404).json({ error: "Image not found" });
@@ -339,7 +336,7 @@ async function startServer() {
     const { status } = req.body;
 
     db.messages = db.messages || [];
-    const index = db.messages.findIndex((m: any) => m.id === id);
+    const index = db.messages.findIndex((m) => m.id === id);
 
     if (index === -1) {
       res.status(404).json({ error: "Message not found" });
@@ -355,7 +352,7 @@ async function startServer() {
     const db = readDB();
     const { id } = req.params;
     db.messages = db.messages || [];
-    const filtered = db.messages.filter((m: any) => m.id !== id);
+    const filtered = db.messages.filter((m) => m.id !== id);
 
     if (filtered.length === db.messages.length) {
       res.status(404).json({ error: "Message not found" });
