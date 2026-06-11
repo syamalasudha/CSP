@@ -44,17 +44,30 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage, isAdm
     return () => clearInterval(interval);
   }, [language]);
 
+  // const navItems = [
+  //   { id: "home", key: "nav_home" },
+  //   { id: "about", key: "nav_about" },
+  //   { id: "admin-details", key: "nav_admin" },
+  //   { id: "staff", key: "nav_staff" },
+  //   { id: "agriculture", key: "nav_agriculture" },
+  //   { id: "welfare", key: "nav_welfare" },
+  //   { id: "voters", key: "nav_voters" },
+  //   { id: "gallery", key: "nav_gallery" },
+  //   { id: "contact", key: "nav_contact" },
+  // ];
+
   const navItems = [
-    { id: "home", key: "nav_home" },
-    { id: "about", key: "nav_about" },
-    { id: "admin-details", key: "nav_admin" },
-    { id: "staff", key: "nav_staff" },
-    { id: "agriculture", key: "nav_agriculture" },
-    { id: "welfare", key: "nav_welfare" },
-    { id: "voters", key: "nav_voters" },
-    { id: "gallery", key: "nav_gallery" },
-    { id: "contact", key: "nav_contact" },
-  ];
+  { id: "home", key: "nav_home" },
+  { id: "about", key: "nav_about" },
+  { id: "admin-details", key: "nav_admin" },
+  { id: "staff", key: "nav_staff" },
+  { id: "citizen-services", key: "nav_services" },
+  { id: "agriculture", key: "nav_agriculture" },
+  { id: "welfare", key: "nav_welfare" },
+  { id: "voters", key: "nav_voters" },
+  { id: "gallery", key: "nav_gallery" },
+  { id: "contact", key: "nav_contact" },
+];
 
   const handleNavClick = (id: string) => {
     setActivePage(id);

@@ -10,6 +10,8 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ToastContainer, Toast, GlassCard } from "./components/UIComponents";
 import { DatabaseSchema } from "./types";
+import { Certificates} from "./pages/Certificates";
+
 
 // Import modular pages
 import { Home } from "./pages/Home";
@@ -142,6 +144,8 @@ export default function App() {
             onToastError={(m) => addToast("error", m)}
           />
         );
+        case "citizen-services":
+  return <Certificates />;
       default:
         return <Home data={portalData} onNavigate={(p) => setActivePage(p)} />;
     }

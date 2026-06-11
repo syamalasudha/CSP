@@ -64,6 +64,15 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
+  onClick={() => onNavigate("citizen-services")}
+  className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-sm font-bold rounded-xl transition shadow-lg flex items-center gap-2"
+>
+  {language === "te"
+    ? "పౌర సేవలు"
+    : "Citizen Services"}
+  <ArrowRight className="w-4 h-4" />
+</button>
+            <button
               onClick={() => onNavigate("contact")}
               className="px-6 py-3 bg-slate-800 hover:bg-slate-700 hover:text-white text-sm font-bold rounded-xl border border-slate-700 transition cursor-pointer"
             >

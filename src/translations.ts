@@ -6,6 +6,8 @@
 export type Language = "en" | "te";
 
 export const translations = {
+
+  
   en: {
     // Navbar & Global Headers
     portal_title: "Vendra Gram Panchayat",
@@ -30,6 +32,36 @@ export const translations = {
     nav_voters: "Voters Info",
     nav_gallery: "Gallery",
     nav_contact: "Contact",
+    nav_services: "Citizen Services",
+
+    // Certificates & Schemes
+    certificates_title: "Certificates Available",
+    income_certificate: "Income Certificate",
+    caste_certificate: "Caste Certificate",
+    residence_certificate: "Residence Certificate",
+    birth_certificate: "Birth Certificate",
+
+    step1: "Visit Village Secretariat / MeeSeva",
+    step2: "Submit application form",
+    step3: "Upload required documents",
+    step4: "Verification by authorities",
+    step5: "Certificate issued",
+
+    required_documents: "Required Documents",
+    application_process: "Application Process",
+    schemes_title: "Government Schemes",
+
+    scheme_amma_vodi: "Amma Vodi",
+    scheme_rythu_bharosa: "Rythu Bharosa",
+    scheme_pension_kanuka: "YSR Pension Kanuka",
+    scheme_cheyutha: "YSR Cheyutha",
+    scheme_kapu_nestham: "Kapu Nestham",
+
+    
+  
+
+ 
+
 
     // Global Section Headings / Badges
     badge_overview: "OVERVIEW",
@@ -80,6 +112,10 @@ export const translations = {
     gallery_subtitle: "Browse real snapshots depicting public facilities, school activities, agricultural cycles, and local governance events in Vendra.",
     contact_title: "Lodge Grievance or Enquiry",
     contact_subtitle: "Contact Vendra Gram Panchayat administrative desks or log a direct ticket into our grievance queue, monitored by Vendra Sachivalayam.",
+    services_subtitle:
+  "Access certificate information, application procedures, welfare schemes and public services available through Village Secretariat.",
+
+
 
     // Section specific fields and details
     about_card_history: "Heritage & Structure",
@@ -139,6 +175,7 @@ export const translations = {
     shg_bank_loans: "SHG Groups with Active Loans",
     shg_loan_amount: "Total Bank Disbursed Microcredit",
     shg_desc: "Active women self-reliance networks under SERP programs.",
+     
 
     // Land breakdowns
     total_aayakattu: "Total Aayakattu",
@@ -246,6 +283,9 @@ export const translations = {
     ticket_mark_viewed: "Mark Viewed",
     ticket_resolve_btn: "Resolve",
     ticket_delete_btn: "Delete Ticket"
+  
+
+
   },
   te: {
     // Navbar & Global Headers
@@ -271,6 +311,30 @@ export const translations = {
     nav_voters: "ఓటర్ల సమాచారం",
     nav_gallery: "గ్యాలరీ",
     nav_contact: "సంప్రదించండి / ఫిర్యాదు",
+    nav_services: "పౌర సేవలు",
+
+     // Certificates & Schemes
+    certificates_title: "అందుబాటులో ఉన్న ధృవపత్రాలు",
+    income_certificate: "ఆదాయ ధృవీకరణ పత్రం",
+    caste_certificate: "కుల ధృవీకరణ పత్రం",
+    residence_certificate: "నివాస ధృవీకరణ పత్రం",
+    birth_certificate: "జనన ధృవీకరణ పత్రం",
+
+    step1: "గ్రామ సచివాలయం / మీ సేవా కేంద్రాన్ని సందర్శించండి",
+    step2: "దరఖాస్తు ఫారమ్ సమర్పించండి",
+    step3: "అవసరమైన పత్రాలను అప్లోడ్ చేయండి",
+    step4: "అధికారులచే ధృవీకరణ",
+    step5: "ధృవీకరణ పత్రం జారీ చేయబడుతుంది",
+
+    required_documents: "అవసరమైన పత్రాలు",
+    application_process: "దరఖాస్తు ప్రక్రియ",
+    schemes_title: "ప్రభుత్వ పథకాలు",
+
+    scheme_amma_vodi: "అమ్మ ఒడి",
+    scheme_rythu_bharosa: "రైతు భరోసా",
+    scheme_pension_kanuka: "వైఎస్సార్ పెన్షన్ కానుక",
+    scheme_cheyutha: "వైఎస్సార్ చేయూత",
+    scheme_kapu_nestham: "కాపు నేస్తం",
 
     // Global Section Headings / Badges
     badge_overview: "గ్రామ వివరాలు",
@@ -321,6 +385,11 @@ export const translations = {
     gallery_subtitle: "ప్రజా సదుపాయాలు, అంగన్‌వాడీ తరగతులు, వ్యవసాయ పనులు మరియు సచివాలయ కార్యక్రమాలకు సంబంధించిన నిజమైన ఫోటోల సమాహారం.",
     contact_title: "ఫిర్యాదులు లేదా విచారణల విభాగం",
     contact_subtitle: "వేండ్ర గ్రీవెన్స్ సెల్ ద్వారా మీ సమస్యల గురించి త్వరిత పరిష్కారం కోసం అర్జీ దాఖలు చేయండి.",
+    services_title: "పౌర సేవలు & ప్రభుత్వ పథకాలు",
+services_subtitle:
+  "గ్రామ సచివాలయం ద్వారా అందుబాటులో ఉన్న ధృవపత్రాలు, పథకాలు మరియు సేవల సమాచారం.",
+
+
 
     // Section specific fields and details
     about_card_history: "చారిత్రక పరిచయం",
@@ -380,7 +449,7 @@ export const translations = {
     shg_bank_loans: "బ్యాంకు రుణాలు ఉన్న మహిళా బృందాలు",
     shg_loan_amount: "మొత్తం మంజూరైన బ్యాంకు మైక్రో-అప్పులు",
     shg_desc: "సెర్ప్ అధీనంలోని క్రియాశీల మహిళా స్వావలంబన పొదుపు బృందాలు.",
-
+    
     // Land breakdowns
     total_aayakattu: "మొత్తం ఆయకట్టు విస్తీర్ణం",
     wet_land: "మాగాణి భూమి (సాగు భూములు)",
@@ -487,5 +556,7 @@ export const translations = {
     ticket_mark_viewed: "చూసినట్లు గుర్తించు",
     ticket_resolve_btn: "సమస్యను పరిష్కరించు",
     ticket_delete_btn: "రిఫరెన్స్ తొలగించు"
+
+   
   }
 };
