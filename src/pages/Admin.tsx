@@ -38,6 +38,7 @@ interface AdminProps {
   onToastSuccess: (msg: string) => void;
   onToastError: (msg: string) => void;
 }
+const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
 
 export const Admin: React.FC<AdminProps> = ({
   data,
@@ -87,7 +88,7 @@ export const Admin: React.FC<AdminProps> = ({
 
   const fetchComplaints = async () => {
     try {
-      const res = await fetch("/api/messages", {
+      const res = await fetch(`${API_BASE}/api/messages`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -109,7 +110,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setLoginLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -136,7 +137,7 @@ export const Admin: React.FC<AdminProps> = ({
     setActionLoading(true);
     try {
       // 1. Update stats
-      await fetch("/api/data/sections", {
+      await fetch(`${API_BASE}/api/data/sections`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +155,7 @@ export const Admin: React.FC<AdminProps> = ({
       });
 
       // 2. Update Lights
-      await fetch("/api/data/sections", {
+      await fetch(`${API_BASE}/api/data/sections`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -185,7 +186,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch("/api/staff", {
+      const res = await fetch(`${API_BASE}/api/staff`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -233,7 +234,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch("/api/announcements", {
+      const res = await fetch(`${API_BASE}/api/announcements`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -281,7 +282,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch("/api/gallery", {
+      const res = await fetch(`${API_BASE}/api/gallery`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

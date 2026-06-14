@@ -8,30 +8,24 @@ import path from "path";
 import fs from "fs";
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
-import { DatabaseSchema, ContactMessage } from "./src/types";
+import { createServer as createViteServer } from "vite";
+import cors from "cors";
+import { DatabaseSchema } from "../src/types";
 
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT || "3000", 10);
 const JWT_SECRET = process.env.JWT_SECRET || "vendra_secret_key_2026_govt_portal";
 const DB_PATH = path.join(process.cwd(), "db.json");
 
-// Default password 'password123' bcrypt hash: $2b$10$rI75Oi7p.NPtLg2/mLos5eTv1CpMQjMc34MIAnUNOeo.1DdZy3CDi
+// Default password 'password123' bcrypt hash
 const DEFAULT_ADMIN_HASH = "$2b$10$rI75Oi7p.NPtLg2/mLos5eTv1CpMQjMc34MIAnUNOeo.1DdZy3CDi";
 
 function readDB(): DatabaseSchema {
   try {
-    // Attempt to read from process.cwd() or fallback to __dirname
-    let targetPath = DB_PATH;
-    if (!fs.existsSync(targetPath)) {
-      // Vercel fallback
-      const fallbackPath = path.join(process.cwd(), "api", "..", "db.json");
-      if (fs.existsSync(fallbackPath)) {
-        targetPath = fallbackPath;
-      } else {
-        console.error("Database file missing completely from both paths.");
-        return {} as DatabaseSchema;
-      }
+    if (!fs.existsSync(DB_PATH)) {
+      console.error("Database file missing, creating empty one.");
+      return {} as DatabaseSchema;
     }
-    const data = fs.readFileSync(targetPath, "utf8");
+    const data = fs.readFileSync(DB_PATH, "utf8");
     return JSON.parse(data) as DatabaseSchema;
   } catch (err) {
     console.error("Error reading database", err);
@@ -51,8 +45,7 @@ function writeDB(data: DatabaseSchema) {
 
 // Ensure the db contains a initial database structure when blank
 if (!fs.existsSync(DB_PATH)) {
-  console.log("No db.json found at", DB_PATH, "- setting up defaults");
-  // The system should have created it, but as a safeguard we will init
+  console.log("No db.json found, setting up defaults");
   const defaultLayout = {
     stats: { population: 3115, areaSqKm: 5.72, totalWards: 12, totalHouseholds: 1109 },
     officials: [],
@@ -71,17 +64,16 @@ if (!fs.existsSync(DB_PATH)) {
     gallery: [],
     messages: []
   };
-  try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(defaultLayout, null, 2), "utf8");
-  } catch (err) {
-    console.error("Warning: Could not write default db.json (likely running in a read-only environment like Vercel).", err);
-  }
+  fs.writeFileSync(DB_PATH, JSON.stringify(defaultLayout, null, 2), "utf8");
 }
 
-const app = express();
-app.use(express.json({ limit: "50mb" }));
+async function startServer() {
+  const app = express();
+  app.use(express.json({ limit: "50mb" }));
+  const corsOrigin = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : true;
+  app.use(cors({ origin: corsOrigin }));
 
-  // Middleware: Authenticate Admin via JWT JWT
+  // Middleware: Authenticate Admin via JWT
   const authenticateToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -375,30 +367,25 @@ app.use(express.json({ limit: "50mb" }));
   });
 
   // --- VITE MIDDLEWARE CONFIGURATION ---
-  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  if (process.env.NODE_ENV !== "production") {
     // Development Mode
-    import("vite").then(({ createServer: createViteServer }) => {
-      createViteServer({
-        server: { middlewareMode: true },
-        appType: "spa",
-      }).then((vite) => {
-        app.use(vite.middlewares);
-        app.listen(PORT, "0.0.0.0", () => {
-          console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
-        });
-      });
-    }).catch(err => console.error("Failed to load Vite:", err));
-  } else if (!process.env.VERCEL) {
-    // Production Mode (Standard Node)
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "spa",
+    });
+    app.use(vite.middlewares);
+  } else {
+    // Production Mode
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*all", (req, res) => {
+    app.get("/*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
-    });
-    
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
     });
   }
 
-export default app;
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
+  });
+}
+
+startServer();

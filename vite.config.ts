@@ -17,6 +17,10 @@ export default defineConfig(() => {
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      // Proxy API calls to the backend in development to avoid CORS and SPA fallback issues
+      proxy: {
+        '/api': process.env.VITE_API_PROXY || 'http://localhost:3000',
+      },
     },
   };
 });

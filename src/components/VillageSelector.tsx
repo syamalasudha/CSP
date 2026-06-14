@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
 import { Landmark, MapPin, Users, ChevronDown, ArrowRight } from "lucide-react";
 
 export interface VillageInfo {
@@ -35,37 +36,42 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
   const [language, setLanguage] = useState<"en" | "te">("en");
   const [villages, setVillages] = useState<VillageInfo[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string>("");
   const [open, setOpen] = useState(false);
 
+  const load = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/data`);
+      if (!res.ok) throw new Error("Could not load villages");
+      const json = await res.json();
+      const raw: any[] = json.villages || [];
+      const mapped: VillageInfo[] = raw.map((r, idx) => ({
+        id: r.id || `village-${idx + 1}`,
+        name: r.name || `Village ${idx + 1}`,
+        nameTe: r.nameTe || "",
+        mandal: r.mandal || "",
+        mandalTe: r.mandalTe || "",
+        district: r.district || "",
+        districtTe: r.districtTe || "",
+        population: r.stats && r.stats.population ? String(r.stats.population) : "—",
+        wards: r.stats && r.stats.totalWards ? String(r.stats.totalWards) : "—",
+        color: DEFAULT_COLORS[idx % DEFAULT_COLORS.length],
+        accent: "emerald",
+      }));
+      setVillages(mapped);
+    } catch (err) {
+      console.error("Failed to load villages", err);
+      setError(err instanceof Error ? err.message : String(err));
+      setVillages([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/data");
-        if (!res.ok) throw new Error("Could not load villages");
-        const json = await res.json();
-        const raw: any[] = json.villages || [];
-        const mapped: VillageInfo[] = raw.map((r, idx) => ({
-          id: r.id || `village-${idx + 1}`,
-          name: r.name || `Village ${idx + 1}`,
-          nameTe: r.nameTe || "",
-          mandal: r.mandal || "",
-          mandalTe: r.mandalTe || "",
-          district: r.district || "",
-          districtTe: r.districtTe || "",
-          population: r.stats && r.stats.population ? String(r.stats.population) : "—",
-          wards: r.stats && r.stats.totalWards ? String(r.stats.totalWards) : "—",
-          color: DEFAULT_COLORS[idx % DEFAULT_COLORS.length],
-          accent: "emerald",
-        }));
-        setVillages(mapped);
-      } catch (err) {
-        setVillages(null);
-      } finally {
-        setLoading(false);
-      }
-    };
     load();
   }, []);
 
