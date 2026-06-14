@@ -8,8 +8,7 @@ import path from "path";
 import fs from "fs";
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
-import { createServer as createViteServer } from "vite";
-import { DatabaseSchema } from "./src/types";
+import { DatabaseSchema, ContactMessage } from "./src/types";
 
 const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "vendra_secret_key_2026_govt_portal";
@@ -378,15 +377,17 @@ app.use(express.json({ limit: "50mb" }));
   // --- VITE MIDDLEWARE CONFIGURATION ---
   if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
     // Development Mode
-    createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    }).then((vite) => {
-      app.use(vite.middlewares);
-      app.listen(PORT, "0.0.0.0", () => {
-        console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
+    import("vite").then(({ createServer: createViteServer }) => {
+      createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      }).then((vite) => {
+        app.use(vite.middlewares);
+        app.listen(PORT, "0.0.0.0", () => {
+          console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
+        });
       });
-    });
+    }).catch(err => console.error("Failed to load Vite:", err));
   } else if (!process.env.VERCEL) {
     // Production Mode (Standard Node)
     const distPath = path.join(process.cwd(), "dist");
