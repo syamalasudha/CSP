@@ -99,9 +99,9 @@ export default function App() {
     if (!selectedVillage) return;
     setLoading(true);
     try {
-      // Load local db.json and pick the selected village by id or name
-      const res = await fetch("/db.json");
-      if (!res.ok) throw new Error("Could not fetch db.json");
+      // Load local db data via API and pick the selected village by id or name
+      const res = await fetch("/api/data");
+      if (!res.ok) throw new Error("Could not fetch data");
       const json = await res.json();
       const villages: any[] = json.villages || [];
       const match = villages.find((v) => v.id === selectedVillage.id || v.name === selectedVillage.name || v.nameTe === selectedVillage.nameTe);

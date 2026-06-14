@@ -42,7 +42,7 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
     const load = async () => {
       setLoading(true);
       try {
-        const res = await fetch("/db.json");
+        const res = await fetch("/api/data");
         if (!res.ok) throw new Error("Could not load villages");
         const json = await res.json();
         const raw: any[] = json.villages || [];
