@@ -146,4 +146,5 @@ export interface DatabaseSchema {
   infrastructure: InfrastructureDetail;
   announcements: Announcement[];
   gallery: GalleryItem[];
+  messages: ContactMessage[];
 }

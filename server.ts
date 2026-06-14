@@ -67,9 +67,8 @@ if (!fs.existsSync(DB_PATH)) {
   fs.writeFileSync(DB_PATH, JSON.stringify(defaultLayout, null, 2), "utf8");
 }
 
-async function startServer() {
-  const app = express();
-  app.use(express.json({ limit: "50mb" }));
+const app = express();
+app.use(express.json({ limit: "50mb" }));
 
   // Middleware: Authenticate Admin via JWT JWT
   const authenticateToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -310,7 +309,7 @@ async function startServer() {
       email: req.body.email || "",
       phone: req.body.phone,
       message: req.body.message,
-      status: "unread",
+      status: "unread" as const,
       date: new Date().toISOString().split("T")[0],
     };
 
@@ -365,25 +364,28 @@ async function startServer() {
   });
 
   // --- VITE MIDDLEWARE CONFIGURATION ---
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
     // Development Mode
-    const vite = await createViteServer({
+    createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
+    }).then((vite) => {
+      app.use(vite.middlewares);
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
+      });
     });
-    app.use(vite.middlewares);
-  } else {
-    // Production Mode
+  } else if (!process.env.VERCEL) {
+    // Production Mode (Standard Node)
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*all", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
+    
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
+    });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
-  });
-}
-
-startServer();
+export default app;
