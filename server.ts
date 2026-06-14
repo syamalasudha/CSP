@@ -20,11 +20,19 @@ const DEFAULT_ADMIN_HASH = "$2b$10$rI75Oi7p.NPtLg2/mLos5eTv1CpMQjMc34MIAnUNOeo.1
 
 function readDB(): DatabaseSchema {
   try {
-    if (!fs.existsSync(DB_PATH)) {
-      console.error("Database file missing, creating empty one.");
-      return {} as DatabaseSchema;
+    // Attempt to read from process.cwd() or fallback to __dirname
+    let targetPath = DB_PATH;
+    if (!fs.existsSync(targetPath)) {
+      // Vercel fallback
+      const fallbackPath = path.join(process.cwd(), "api", "..", "db.json");
+      if (fs.existsSync(fallbackPath)) {
+        targetPath = fallbackPath;
+      } else {
+        console.error("Database file missing completely from both paths.");
+        return {} as DatabaseSchema;
+      }
     }
-    const data = fs.readFileSync(DB_PATH, "utf8");
+    const data = fs.readFileSync(targetPath, "utf8");
     return JSON.parse(data) as DatabaseSchema;
   } catch (err) {
     console.error("Error reading database", err);
@@ -44,7 +52,7 @@ function writeDB(data: DatabaseSchema) {
 
 // Ensure the db contains a initial database structure when blank
 if (!fs.existsSync(DB_PATH)) {
-  console.log("No db.json found, setting up defaults");
+  console.log("No db.json found at", DB_PATH, "- setting up defaults");
   // The system should have created it, but as a safeguard we will init
   const defaultLayout = {
     stats: { population: 3115, areaSqKm: 5.72, totalWards: 12, totalHouseholds: 1109 },
@@ -64,7 +72,11 @@ if (!fs.existsSync(DB_PATH)) {
     gallery: [],
     messages: []
   };
-  fs.writeFileSync(DB_PATH, JSON.stringify(defaultLayout, null, 2), "utf8");
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(defaultLayout, null, 2), "utf8");
+  } catch (err) {
+    console.error("Warning: Could not write default db.json (likely running in a read-only environment like Vercel).", err);
+  }
 }
 
 const app = express();
