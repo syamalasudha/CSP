@@ -378,10 +378,19 @@ async function startServer() {
   } else {
     // Production Mode
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("/*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+    const indexFile = path.join(distPath, "index.html");
+    if (fs.existsSync(distPath) && fs.existsSync(indexFile)) {
+      app.use(express.static(distPath));
+      app.get("/*", (req, res) => {
+        res.sendFile(indexFile);
+      });
+    } else {
+      // No frontend build present — run API-only. Provide a helpful root response.
+      console.warn("No frontend build found at", distPath, ": running API-only mode.");
+      app.get('/', (req, res) => {
+        res.json({ status: 'ok', mode: 'api-only', message: 'Frontend not deployed on this service.' });
+      });
+    }
   }
 
   app.listen(PORT, "0.0.0.0", () => {
