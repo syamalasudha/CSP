@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
-import { createServer as createViteServer } from "vite";
+// Import Vite dynamically in dev only to avoid loading Vite in production bundles
 import cors from "cors";
 import { DatabaseSchema } from "../src/types";
 
@@ -368,12 +368,13 @@ async function startServer() {
 
   // --- VITE MIDDLEWARE CONFIGURATION ---
   if (process.env.NODE_ENV !== "production") {
-    // Development Mode
+    // Development Mode - load vite dynamically so production bundles don't require Vite
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
-    app.use(vite.middlewares);
+    app.use((vite as any).middlewares);
   } else {
     // Production Mode
     const distPath = path.join(process.cwd(), "dist");
