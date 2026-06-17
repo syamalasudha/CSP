@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useEffect } from "react";
-const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
+// Temporary hardcoded API base for testing deployment issues (replace after test)
+const API_BASE = "https://csp-3-7uef.onrender.com";
 import { Landmark, MapPin, Users, ChevronDown, ArrowRight } from "lucide-react";
 
 export interface VillageInfo {
