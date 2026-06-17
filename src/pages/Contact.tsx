@@ -14,9 +14,10 @@ interface ContactProps {
   onNavigateHome: () => void;
 }
 
+import { API_BASE, apiUrl } from "../config/api";
+
 export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigateHome }) => {
   const { language, t } = useLanguage();
-  const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,7 +37,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigate
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/api/messages`, {
+      const response = await fetch(apiUrl("/api/messages"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

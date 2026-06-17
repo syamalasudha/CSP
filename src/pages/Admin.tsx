@@ -29,6 +29,7 @@ import {
   EyeOff
 } from "lucide-react";
 import { DatabaseSchema, StaffMember, Announcement, GalleryItem, ContactMessage } from "../types";
+import { API_BASE, apiUrl } from "../config/api";
 
 interface AdminProps {
   data: DatabaseSchema;
@@ -38,7 +39,7 @@ interface AdminProps {
   onToastSuccess: (msg: string) => void;
   onToastError: (msg: string) => void;
 }
-const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
+// use shared API_BASE and apiUrl helper
 
 export const Admin: React.FC<AdminProps> = ({
   data,
@@ -88,7 +89,7 @@ export const Admin: React.FC<AdminProps> = ({
 
   const fetchComplaints = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/messages`, {
+      const res = await fetch(apiUrl(`/api/messages`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -110,7 +111,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setLoginLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
+      const res = await fetch(apiUrl(`/api/auth/login`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -137,7 +138,7 @@ export const Admin: React.FC<AdminProps> = ({
     setActionLoading(true);
     try {
       // 1. Update stats
-      await fetch(`${API_BASE}/api/data/sections`, {
+      await fetch(apiUrl(`/api/data/sections`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -155,7 +156,7 @@ export const Admin: React.FC<AdminProps> = ({
       });
 
       // 2. Update Lights
-      await fetch(`${API_BASE}/api/data/sections`, {
+      await fetch(apiUrl(`/api/data/sections`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -186,7 +187,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/staff`, {
+      const res = await fetch(apiUrl(`/api/staff`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,7 +212,7 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteStaff = async (id: string, name: string) => {
     if (!confirm(language === "te" ? `మీరు నిజంగా ఉద్యోగి '${name}' వివరాలను తొలగించాలనుకుంటున్నారా?` : `Are you sure you want to remove staff ${name}?`)) return;
     try {
-      const res = await fetch(`/api/staff/${id}`, {
+      const res = await fetch(apiUrl(`/api/staff/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -234,7 +235,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/announcements`, {
+      const res = await fetch(apiUrl(`/api/announcements`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -259,7 +260,7 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteAnn = async (id: string) => {
     if (!confirm(language === "te" ? "మీరు నిజంగా ఈ ప్రకటనను తొలగించాలనుకుంటున్నారా?" : "Are you sure you want to delete this announcement?")) return;
     try {
-      const res = await fetch(`/api/announcements/${id}`, {
+      const res = await fetch(apiUrl(`/api/announcements/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -282,7 +283,7 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/gallery`, {
+      const res = await fetch(apiUrl(`/api/gallery`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -307,7 +308,7 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteGal = async (id: string) => {
     if (!confirm(language === "te" ? "ఈ ఫోటోను తొలగించాలనుకుంటున్నారా?" : "Do you want to delete this photo?")) return;
     try {
-      const res = await fetch(`/api/gallery/${id}`, {
+      const res = await fetch(apiUrl(`/api/gallery/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -323,7 +324,7 @@ export const Admin: React.FC<AdminProps> = ({
   // CRUD: COMPLAINT resolve
   const handleUpdateComplaintStatus = async (id: string, status: "read" | "resolved") => {
     try {
-      const res = await fetch(`/api/messages/${id}`, {
+      const res = await fetch(apiUrl(`/api/messages/${id}`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -344,7 +345,7 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteComplaint = async (id: string) => {
     if (!confirm(language === "te" ? "ఈ టికెట్‌ను శాశ్వతంగా తొలగించాలా?" : "Remove this ticket permanently?")) return;
     try {
-      const res = await fetch(`/api/messages/${id}`, {
+      const res = await fetch(apiUrl(`/api/messages/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

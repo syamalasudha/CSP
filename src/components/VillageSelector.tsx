@@ -4,8 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-// Temporary hardcoded API base for testing deployment issues (replace after test)
-const API_BASE = "https://csp-3-7uef.onrender.com";
+import { API_BASE, apiUrl } from "../config/api";
 import { Landmark, MapPin, Users, ChevronDown, ArrowRight } from "lucide-react";
 
 export interface VillageInfo {
@@ -45,7 +44,7 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/api/data`);
+      const res = await fetch(apiUrl("/api/data"));
       if (!res.ok) throw new Error("Could not load villages");
       const json = await res.json();
       const raw: any[] = json.villages || [];

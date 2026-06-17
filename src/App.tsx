@@ -27,7 +27,7 @@ import { Admin } from "./pages/Admin";
 import { Loader2, Landmark, ArrowLeftRight } from "lucide-react";
 
 const VILLAGE_KEY = "csp-selected-village";
-const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "";
+import { API_BASE, apiUrl } from "./config/api";
 
 export default function App() {
   const [selectedVillage, setSelectedVillage] = useState<VillageInfo | null>(() => {
@@ -101,7 +101,7 @@ export default function App() {
     setLoading(true);
     try {
       // Load local db data via API and pick the selected village by id or name
-      const res = await fetch(`${API_BASE}/api/data`);
+      const res = await fetch(apiUrl("/api/data"));
       if (!res.ok) throw new Error("Could not fetch data");
       const json = await res.json();
       const villages: any[] = json.villages || [];
