@@ -120,8 +120,13 @@ async function startServer() {
 
   // --- DATA GET & FETCH API ---
   app.get("/api/data", (req, res) => {
-    const db = readDB();
-    res.json(db);
+    try {
+      const db = readDB();
+      res.json(db);
+    } catch (err) {
+      console.error("Error handling /api/data", { err, path: req.path, method: req.method, headers: req.headers });
+      res.status(500).json({ error: "Internal server error" });
+    }
   });
 
   // --- CRUD: Stats, Land, Infrastructure, Pensions, SHGs ---
@@ -392,6 +397,23 @@ async function startServer() {
       });
     }
   }
+
+  // Global error handler to catch unexpected errors and log request context
+  // (helps diagnose 500s when called from browsers/other origins)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    try {
+      console.error("Unhandled server error:", err, {
+        path: req.path,
+        method: req.method,
+        headers: req.headers,
+        bodyPreview: req.body && typeof req.body === 'object' ? JSON.stringify(req.body).slice(0, 200) : String(req.body),
+      });
+    } catch (logErr) {
+      console.error("Error while logging unhandled error", logErr);
+    }
+    res.status(500).json({ error: "Internal server error" });
+  });
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`[Vendra Panchayat Portal Server] Running on http://localhost:${PORT}`);
