@@ -158,7 +158,7 @@ export const LandAllocationAcreBar: React.FC<LandBarProps> = ({
           Land Classification
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-          Acreage allocation of Vendra Gram Panchayat out of {total} Acres
+          Acreage allocation of the Gram Panchayat out of {total} Acres
         </p>
       </div>
 
@@ -254,7 +254,7 @@ export const PensionStructureBar: React.FC<PensionsProps> = ({
           Welfare Beneficiaries
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          State pension distribution segments covering all {total} active beneficiaries in Vendra
+          State pension distribution segments covering all {total} active beneficiaries in the village
         </p>
       </div>
 

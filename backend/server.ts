@@ -71,7 +71,7 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: "50mb" }));
   const corsOrigin = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : true;
-  app.use(cors({ origin: corsOrigin }));
+  app.use(cors({ origin: corsOrigin, credentials: true }));
 
   // Middleware: Authenticate Admin via JWT
   const authenticateToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {

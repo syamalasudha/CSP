@@ -19,6 +19,7 @@ export interface VillageInfo {
   wards: string;
   color: string;
   accent: string;
+  isAvailable?: boolean;
 }
 
 const DEFAULT_COLORS = [
@@ -60,6 +61,7 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
         wards: r.stats && r.stats.totalWards ? String(r.stats.totalWards) : "—",
         color: DEFAULT_COLORS[idx % DEFAULT_COLORS.length],
         accent: "emerald",
+        isAvailable: !!r.name && r.name.trim() !== "",
       }));
       setVillages(mapped);
     } catch (err) {
@@ -77,8 +79,8 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
 
   const selected = villages?.find((v) => v.id === selectedId) ?? null;
 
-  // Only the first village has data; others are "coming soon"
-  const isAvailable = (idx: number) => idx === 0;
+  // A village is available if it has a real name set
+  const checkAvailable = (v: VillageInfo) => v.isAvailable;
 
   const handleProceed = () => {
     if (selected) onSelect(selected);
@@ -175,7 +177,7 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
             {open && (
               <div className="absolute z-20 mt-2 w-full bg-slate-900 border border-slate-700 rounded-xl shadow-2xl shadow-black/40 overflow-hidden">
                 {villages.map((v, idx) => {
-                  const available = isAvailable(idx);
+                  const available = checkAvailable(v);
                   return (
                     <button
                       key={v.id}

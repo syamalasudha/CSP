@@ -14,6 +14,23 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
   const { language, t } = useLanguage();
   const { voters } = data;
 
+  if (!voters || voters.totalVoters == null) {
+    return (
+      <div className="space-y-12">
+        <SectionHeading
+          badge={t("nav_voters")}
+          title={t("voter_title")}
+          subtitle={language === "te" ? "ఓటర్ల డేటా త్వరలో నవీకరించబడుతుంది." : "Voter demographic data will be updated soon."}
+        />
+        <div className="text-center p-12 bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800">
+           <p className="text-slate-500 dark:text-slate-400">
+             {language === "te" ? "ఈ గ్రామం లేదా వార్డు కోసం ఓటర్ల గణాంకాలు ఇంకా అందుబాటులో లేవు." : "Voter statistics are not yet available for this region."}
+           </p>
+        </div>
+      </div>
+    );
+  }
+
   const subtitleWithCount = t("voter_subtitle").replace("{voters.totalVoters}", voters.totalVoters.toString());
 
   return (
@@ -27,11 +44,11 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
       {/* Embedded Donut demographic visual chart */}
       <section className="grid grid-cols-1 gap-8">
         <VoterDistributionDonut
-          male={voters.maleVoters}
-          female={voters.femaleVoters}
-          bc={voters.bcVoters}
-          sc={voters.scVoters}
-          st={voters.stVoters}
+          male={voters.maleVoters || 0}
+          female={voters.femaleVoters || 0}
+          bc={voters.bcVoters || 0}
+          sc={voters.scVoters || 0}
+          st={voters.stVoters || 0}
         />
       </section>
 
@@ -50,7 +67,7 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
                 {language === "te" ? "గ్రామంలోని మొత్తం పోలింగ్ కేంద్రాలు" : "TOTAL POLLING STATIONS IN VILLAGE"}
               </span>
               <p className="text-2xl font-display font-black text-indigo-700 dark:text-indigo-400">
-                {voters.totalPollingStations} {language === "te" ? "పోలింగ్ బూత్‌లు" : "Booths"}
+                {voters.totalPollingStations || 0} {language === "te" ? "పోలింగ్ బూత్‌లు" : "Booths"}
               </p>
             </div>
 
@@ -71,8 +88,8 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
 
           <p className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">
             {language === "te"
-              ? "వేండ్ర గ్రామ నివాసితులు స్థానిక గ్రామ సచివాలయంలో (డిజిటల్ అసిస్టెంట్ శ్రీ వల్లూరి ప్రదీప్ గారి వద్ద) కింది సేవలు పొందవచ్చును:"
-              : "Registered residents of Vendra can perform the following services at our local Panchayat Sachivalayam (Digital Assistant Sri Valluri Pradeep):"}
+              ? "నమోదిత స్థానిక పౌరులు మా గ్రామ సచివాలయంలో కింది సేవలను పొందవచ్చు:"
+              : `Registered residents of ${data.name} can perform the following services at our local Panchayat Sachivalayam (Digital Assistant Sri Valluri Pradeep):`}
           </p>
 
           <ul className="space-y-2 text-xs">

@@ -95,7 +95,7 @@ export const Administration: React.FC<{ data: DatabaseSchema; onActionClick?: (m
                   {getLocalizedOfficialName(off.name)}
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-sans mt-0.5">
-                  {language === "te" ? "వేండ్ర గ్రామ పంచాయతీ ప్రతినిధి" : "Vendra Gram Panchayat Representative"}
+                  {language === "te" ? `${data.nameTe || data.name} గ్రామ పంచాయతీ ప్రతినిధి` : `${data.name} Gram Panchayat Representative`}
                 </p>
               </div>
 

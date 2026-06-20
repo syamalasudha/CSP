@@ -80,8 +80,8 @@ export const Welfare: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
 
           <p className="text-xs text-slate-500 dark:text-slate-400 font-sans leading-relaxed">
             {language === "te"
-              ? "వేండ్ర గ్రామంలో SERP కింద పనిచేస్తున్న మహిళా స్వయం సహాయక సంఘాలు 100% రుణ అర్హత సాధించాయి. సేంద్రీయ వ్యవసాయ పరికరాలు, చిరు వ్యాపారాలు మరియు పశుపాలన కొరకు ఈ నిధులు ఉపయోగపడుతున్నాయి."
-              : "Cooperative female collectives under SERP represent 100% bank loan linking success rate in Vendra. Funds are deployed for organic farming tools, small retail shops, and backyard dairy production."}
+              ? "SERP కింద కోపరేటివ్ మహిళా సంఘాలు మా గ్రామంలో 100% బ్యాంక్ లోన్ లింకింగ్ విజయాన్ని సాధించాయి."
+              : `Cooperative female collectives under SERP represent 100% bank loan linking success rate in ${data.name}. Funds are deployed for organic farming tools, small retail shops, and backyard dairy production.`}
           </p>
         </GlassCard>
 

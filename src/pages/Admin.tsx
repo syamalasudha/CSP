@@ -372,7 +372,7 @@ export const Admin: React.FC<AdminProps> = ({
                 {language === "te" ? "అడ్మిన్ లాగిన్ ధృవీకరణ" : "Admin Area Authentication"}
               </h2>
               <p className="text-xs text-slate-500 mt-1 dark:text-slate-400 font-sans">
-                {language === "te" ? "వేండ్ర గ్రామ పంచాయతీ ప్రత్యేక అడ్మినిస్ట్రేటర్ పోర్టల్ లాగిన్." : "Authenticates session credentials for the Vendra administrative dashboard."}
+                {language === "te" ? `${data.nameTe || data.name} గ్రామ పంచాయతీ ప్రత్యేక అడ్మినిస్ట్రేటర్ పోర్టల్ లాగిన్.` : `Authenticates session credentials for the ${data.name} administrative dashboard.`}
               </p>
             </div>
           </div>

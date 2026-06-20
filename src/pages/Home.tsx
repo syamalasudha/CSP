@@ -34,7 +34,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
         <div className="absolute inset-0 z-0 bg-slate-950">
           <img
             src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1600"
-            alt="Vendra Village background"
+            alt={`${data.name} Village background`}
             className="w-full h-full object-cover opacity-35"
             referrerPolicy="no-referrer"
           />
@@ -48,7 +48,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
           <h1 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
             {t("portal_title")}
             <span className="block mt-2 bg-gradient-to-r from-gov-400 to-emerald-400 bg-clip-text text-transparent text-xl md:text-3xl">
-              {language === "te" ? "పెదపూడి మండలం, కాకినాడ జిల్లా" : "Pedapudi Mandal, Kakinada District"}
+              {language === "te" ? `${data.mandalTe || data.mandal} మండలం, ${data.districtTe || data.district} జిల్లా` : `${data.mandal} Mandal, ${data.district} District`}
             </span>
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">

@@ -28,15 +28,35 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const t = (key: string): string => {
     try {
       const translationSet = translations[language] || translations["en"];
-      const val = (translationSet as any)[key];
-      if (val !== undefined) return val;
+      let val = (translationSet as any)[key];
+      
+      if (val === undefined) {
+        const fallbackSet = translations["en"];
+        val = (fallbackSet as any)[key];
+      }
+      if (val === undefined) return key;
 
-      // Fallback to English if translation isn't available
-      const fallbackSet = translations["en"];
-      const fallbackVal = (fallbackSet as any)[key];
-      if (fallbackVal !== undefined) return fallbackVal;
-
-      return key; // Returns raw key if missing entirely
+      // Automatically replace hardcoded Vendra/Pedapudi/Kakinada with selected village
+      if (typeof val === 'string') {
+        try {
+          const sv = localStorage.getItem("csp-selected-village");
+          if (sv) {
+            const village = JSON.parse(sv);
+            val = val.replace(/Vendra/gi, language === 'te' && village.nameTe ? village.nameTe : village.name);
+            val = val.replace(/వేండ్ర/g, village.nameTe || village.name);
+            
+            if (village.mandal) {
+               val = val.replace(/Pedapudi/gi, language === 'te' && village.mandalTe ? village.mandalTe : village.mandal);
+               val = val.replace(/పెదపూడి/g, village.mandalTe || village.mandal);
+            }
+            if (village.district) {
+               val = val.replace(/Kakinada/gi, language === 'te' && village.districtTe ? village.districtTe : village.district);
+               val = val.replace(/కాకినాడ/g, village.districtTe || village.district);
+            }
+          }
+        } catch(e) {}
+      }
+      return val;
     } catch (err) {
       return key;
     }

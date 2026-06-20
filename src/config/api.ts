@@ -1,6 +1,7 @@
-// Shared API base for frontend; falls back to Render backend if env not provided
-export const API_BASE = (import.meta as any)?.env?.VITE_API_BASE ?? "https://csp-3-7uef.onrender.com";
+// Shared API base for frontend; strictly taking from env
+export const API_BASE = import.meta.env.VITE_API_BASE as string;
 
 export function apiUrl(path: string) {
-  return `${API_BASE.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+  const base = API_BASE || "";
+  return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
 }

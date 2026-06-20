@@ -63,8 +63,8 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
 
             <p className="text-xs text-slate-600 dark:text-slate-400 font-sans leading-relaxed">
               {language === "te"
-                ? "వేండ్ర గ్రామంలో పచ్చని వరి పొలాలు ప్రధాన్యత కలిగి ఉన్నాయి. కాల్వల ద్వారా మరియు లోతైన బోరుబావుల సహాయంతో 1236.38 ఎకరాల సాగు నీటి భూములకు నీరు అందుతుంది."
-                : "Wet cultivated lands dominate Vendra’s territory, comprising 1236.38 acres of fertile soils primarily growing high-quality paddy rice, supported by delta canal feeding and deep borewell irrigation grids."}
+                ? `${data.name} గ్రామంలో పచ్చని వరి పొలాలు ప్రధాన్యత కలిగి ఉన్నాయి. కాల్వల ద్వారా మరియు లోతైన బోరుబావుల సహాయంతో 1236.38 ఎకరాల సాగు నీటి భూములకు నీరు అందుతుంది.`
+                : `Wet cultivated lands dominate ${data.name}’s territory, comprising 1236.38 acres of fertile soils primarily growing high-quality paddy rice, supported by delta canal feeding and deep borewell irrigation grids.`}
             </p>
           </GlassCard>
         </div>

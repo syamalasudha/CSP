@@ -131,6 +131,15 @@ export interface ContactMessage {
 }
 
 export interface DatabaseSchema {
+  id: string;
+  name: string;
+  nameTe: string;
+  mandal: string;
+  mandalTe: string;
+  district: string;
+  districtTe: string;
+  type?: string;
+  grade?: string;
   stats: VillageStats;
   officials: Official[];
   wardMembers: WardMember[];
