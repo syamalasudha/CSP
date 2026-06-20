@@ -569,13 +569,13 @@
       "officials": [],
       "wardMembers": [],
       "voters": {
-        "totalPollingStations": null,
-        "maleVoters": 2145,
-        "femaleVoters": 2249,
+        "totalPollingStations": 1,
+        "maleVoters": null,
+        "femaleVoters": null,
         "bcVoters": null,
         "scVoters": null,
         "stVoters": null,
-        "totalVoters": 4394
+        "totalVoters": null
       },
       "staff": [],
       "land": {
@@ -590,9 +590,9 @@
         "totalKhathas": null
       },
       "education": {
-        "govtSchools": null,
-        "highSchools": null,
-        "anganwadiCenters": null
+        "govtSchools": 3,
+        "highSchools": 1,
+        "anganwadiCenters": 1
       },
       "health": {
         "hasWellnessCentre": null,
