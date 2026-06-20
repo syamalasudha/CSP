@@ -553,26 +553,88 @@
       "messages": []
     },
     {
-      "id": "village-4",
-      "name": "",
-      "nameTe": "",
-      "mandal": "",
-      "mandalTe": "",
-      "district": "",
-      "districtTe": "",
-      "stats": {},
+      "id": "ko-mallavaram",
+      "name": "K.O. Mallavaram",
+      "nameTe": "కే.ఓ. మల్లవరం",
+      "mandal": "Tuni",
+      "mandalTe": "తుని",
+      "district": "Kakinada",
+      "districtTe": "కాకినాడ",
+      "stats": {
+        "population": 4394,
+        "areaSqKm": 5.31,
+        "totalWards": null,
+        "totalHouseholds": 1222
+      },
       "officials": [],
       "wardMembers": [],
-      "voters": {},
+      "voters": {
+        "totalPollingStations": null,
+        "maleVoters": 2145,
+        "femaleVoters": 2249,
+        "bcVoters": null,
+        "scVoters": null,
+        "stVoters": null,
+        "totalVoters": 4394
+      },
       "staff": [],
-      "land": {},
-      "education": {},
-      "health": {},
-      "water": {},
-      "ration": {},
-      "shg": {},
-      "pensions": {},
-      "infrastructure": {},
+      "land": {
+        "totalAayakattuAcres": null,
+        "wetLandAcres": null,
+        "dryLandAcres": null,
+        "porambokuAcres": null,
+        "fisheriesAcres": null,
+        "assignedAcres": null,
+        "endowmentsAcres": null,
+        "totalSurveyNumbers": null,
+        "totalKhathas": null
+      },
+      "education": {
+        "govtSchools": null,
+        "highSchools": null,
+        "anganwadiCenters": null
+      },
+      "health": {
+        "hasWellnessCentre": null,
+        "ashaWorkers": null,
+        "anms": null,
+        "swpcSheds": null,
+        "clapmitras": null,
+        "sweepers": null,
+        "tricycles": null
+      },
+      "water": {
+        "source": "",
+        "overheadTankLitres": null,
+        "supplyPerHeadLitresDay": null,
+        "publicTaps": null,
+        "privateTaps": null
+      },
+      "ration": {
+        "fairPriceShops": null,
+        "riceCards": null
+      },
+      "shg": {
+        "totalGroups": null,
+        "groupsWithBankLoans": null,
+        "totalLoanAmountLakhs": null
+      },
+      "pensions": {
+        "oap": null,
+        "disabled": null,
+        "widow": null,
+        "tTappers": null,
+        "singleWomen": null,
+        "dmho": null,
+        "artists": null,
+        "abh": null,
+        "cobbler": null,
+        "total": null
+      },
+      "infrastructure": {
+        "ledStreetLights": null,
+        "ccmsBoxes": null
+      },
       "announcements": [],
       "gallery": [],
       "messages": []
