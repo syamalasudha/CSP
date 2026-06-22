@@ -7,18 +7,38 @@ import React from "react";
 import { useLanguage } from "./LanguageContext";
 import { Landmark, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 import { VillageInfo } from "./VillageSelector";
+import { DatabaseSchema } from "../types";
 
 interface FooterProps {
   selectedVillage: VillageInfo;
+  data?: DatabaseSchema | null;
 }
 
-export const Footer: React.FC<FooterProps> = ({ selectedVillage }) => {
+export const Footer: React.FC<FooterProps> = ({ selectedVillage, data }) => {
   const currentYear = new Date().getFullYear();
   const { language, t } = useLanguage();
 
   const villageName = language === "te" ? selectedVillage.nameTe : selectedVillage.name;
   const mandalName = language === "te" ? selectedVillage.mandalTe : selectedVillage.mandal;
   const districtName = language === "te" ? selectedVillage.districtTe : selectedVillage.district;
+
+  let phone = "N/A";
+  let email = `${selectedVillage.id}.panchayat@ap.gov.in`;
+
+  if (data) {
+    if ((data as any).communication?.phone) {
+      phone = (data as any).communication.phone;
+    } else if (data.officials && data.officials.length > 0) {
+      const sec = data.officials.find((o) => o.designation.toLowerCase().includes("secretary")) || data.officials[0];
+      if (sec.contact) {
+        phone = sec.contact;
+      }
+    }
+    
+    if ((data as any).communication?.email && (data as any).communication.email.length > 0) {
+      email = (data as any).communication.email[0];
+    }
+  }
 
   return (
     <footer className="bg-slate-900 text-slate-300 dark:bg-slate-950 border-t border-slate-800/80 pt-16 pb-8 transition-colors duration-300">
@@ -59,20 +79,24 @@ export const Footer: React.FC<FooterProps> = ({ selectedVillage }) => {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-gov-400 shrink-0" />
-                <a
-                  href="tel:9573930799"
-                  className="hover:text-white transition font-mono"
-                >
-                  +91-9573930799
-                </a>
+                {phone !== "N/A" ? (
+                  <a
+                    href={`tel:${phone}`}
+                    className="hover:text-white transition font-mono"
+                  >
+                    +91-{phone}
+                  </a>
+                ) : (
+                  <span className="text-slate-400 font-mono">N/A</span>
+                )}
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-gov-400 shrink-0" />
                 <a
-                  href={`mailto:${selectedVillage.id}.panchayat@ap.gov.in`}
-                  className="hover:text-white transition font-mono"
+                  href={`mailto:${email}`}
+                  className="hover:text-white transition font-mono break-all"
                 >
-                  {selectedVillage.id}.panchayat@ap.gov.in
+                  {email}
                 </a>
               </li>
             </ul>

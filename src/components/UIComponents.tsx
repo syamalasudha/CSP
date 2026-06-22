@@ -128,13 +128,16 @@ export const ToastContainer: React.FC<{
 };
 
 // --- DYNAMIC EMBEDDED MAP COMPONENT ---
-export const VillageMapShadowbox: React.FC = () => {
+export const VillageMapShadowbox: React.FC<{ locationQuery?: string }> = ({ locationQuery }) => {
+  const query = locationQuery ? encodeURIComponent(locationQuery) : "Andhra+Pradesh";
+  const mapSrc = `https://maps.google.com/maps?q=${query}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+  
   return (
     <div className="relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 h-80 bg-slate-100 dark:bg-slate-900">
-      {/* Real embed map of the selected region if possible, otherwise an interactive SVG map representing the Village */}
+      {/* Real embed map of the selected region */}
       <iframe
         title="Village Location Map"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3814.7335272828553!2d82.16109968461877!3d16.98774780!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a38234ea727e0a7%3A0xe54e67272848c084!2sVendra%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+        src={mapSrc}
         width="100%"
         height="100%"
         style={{ border: 0 }}

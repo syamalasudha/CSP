@@ -61,27 +61,30 @@ export const Directory: React.FC<{ data: DatabaseSchema; onActionClick?: (msg: s
 
   const getLocalizedStaffName = (name: string) => {
     if (language !== "te") return name;
-    // Real staff Telugu mapping
-    const mappings: { [key: string]: string } = {
-      "Sunkara Veera Swamy": "సుంకర వీరస్వామి",
-      "Lanka Kumar": "లంక కుమార్",
-      "Valluri Pradeep": "వల్లూరి ప్రదీప్",
-      "Dekka Krishna": "డెక్కా కృష్ణ",
-      "Thotakura Durgaprasad": "తోటకూర దుర్గాప్రసాద్",
-      "Gude Lavanya": "గుడే లావణ్య",
-      "Ogireddy Santhoshi": "ఓగిరెడ్డి సంతోషి",
-      "Elipey Gnana Bhushan": "ఎలిపే జ్ఞాన భూషణ్",
-      "Nandam Satish": "నందం సతీష్",
-      "Katta Prasad": "కట్టా ప్రసాద్",
-      "P Saradha": "పి. శారద",
-      "P Rathnam": "పి. రత్నం",
-      "K Ramalaxmi": "కె. రామలక్ష్మి",
-      "CH Surya Kumari": "సి.హెచ్. సూర్యకుమారి",
-      "Lingam Murali": "లింగం మురళి",
-      "K Jagadeeshwari": "కె. జగదీశ్వరి",
-      "Satya Malasri": "సత్య మాలాశ్రీ"
-    };
-    return mappings[name] || name;
+    if (data.id === "vendra") {
+      // Real staff Telugu mapping
+      const mappings: { [key: string]: string } = {
+        "Sunkara Veera Swamy": "సుంకర వీరస్వామి",
+        "Lanka Kumar": "లంక కుమార్",
+        "Valluri Pradeep": "వల్లూరి ప్రదీప్",
+        "Dekka Krishna": "డెక్కా కృష్ణ",
+        "Thotakura Durgaprasad": "తోటకూర దుర్గాప్రసాద్",
+        "Gude Lavanya": "గుడే లావణ్య",
+        "Ogireddy Santhoshi": "ఓగిరెడ్డి సంతోషి",
+        "Elipey Gnana Bhushan": "ఎలిపే జ్ఞాన భూషణ్",
+        "Nandam Satish": "నందం సతీష్",
+        "Katta Prasad": "కట్టా ప్రసాద్",
+        "P Saradha": "పి. శారద",
+        "P Rathnam": "పి. రత్నం",
+        "K Ramalaxmi": "కె. రామలక్ష్మి",
+        "CH Surya Kumari": "సి.హెచ్. సూర్యకుమారి",
+        "Lingam Murali": "లింగం మురళి",
+        "K Jagadeeshwari": "కె. జగదీశ్వరి",
+        "Satya Malasri": "సత్య మాలాశ్రీ"
+      };
+      return mappings[name] || name;
+    }
+    return name;
   };
 
   const filteredStaff = data.staff.filter((s: StaffMember) => {

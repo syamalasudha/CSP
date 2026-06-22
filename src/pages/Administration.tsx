@@ -34,30 +34,35 @@ export const Administration: React.FC<{ data: DatabaseSchema; onActionClick?: (m
   };
 
   const getLocalizedOfficialName = (name: string) => {
-    if (name.includes("Srinivas") && !name.includes("Achanta")) return t("role_sarpanch");
-    if (name.includes("Trimurthulu")) return t("role_vice_sarpanch");
-    if (name.includes("Veera Swamy") || name.includes("S. Veera")) return t("role_panchayat_secretary");
+    if (data.id === "vendra") {
+      if (name.includes("Srinivas") && !name.includes("Achanta")) return t("role_sarpanch");
+      if (name.includes("Trimurthulu")) return t("role_vice_sarpanch");
+      if (name.includes("Veera Swamy") || name.includes("S. Veera")) return t("role_panchayat_secretary");
+    }
     return name;
   };
 
   // Safe ward member lookup for matching Telugu names
   const getLocalizedWardMemberName = (ward: number, defaultName: string) => {
     if (language !== "te") return defaultName;
-    const teluguWardMembers: { [key: number]: string } = {
-      1: "మండపల్లి శామ్యూల్",
-      2: "దార ప్రశాంతి కుమారి",
-      3: "నార్ల వీర వెంకట సత్యనారాయణమ్మ",
-      4: "కోసూరి సతీష్",
-      5: "పట్నిది సూర్యకుమారి",
-      6: "ఆచంట శ్రీనివాసు",
-      7: "పేపకాయల సూర్యనారాయణ",
-      8: "నార్ల వీర వెంకట సత్యనారాయణ",
-      9: "నార్ల సత్యవాణి",
-      10: "ఓదూరి లక్ష్మి",
-      11: "కోసూరి శ్రీనివాస్",
-      12: "కొండేపూడి కనకదుర్గ"
-    };
-    return teluguWardMembers[ward] || defaultName;
+    if (data.id === "vendra") {
+      const teluguWardMembers: { [key: number]: string } = {
+        1: "మండపల్లి శామ్యూల్",
+        2: "దార ప్రశాంతి కుమారి",
+        3: "నార్ల వీర వెంకట సత్యనారాయణమ్మ",
+        4: "కోసూరి సతీష్",
+        5: "పట్నిది సూర్యకుమారి",
+        6: "ఆచంట శ్రీనివాసు",
+        7: "పేపకాయల సూర్యనారాయణ",
+        8: "నార్ల వీర వెంకట సత్యనారాయణ",
+        9: "నార్ల సత్యవాణి",
+        10: "ఓదూరి లక్ష్మి",
+        11: "కోసూరి శ్రీనివాస్",
+        12: "కొండేపూడి కనకదుర్గ"
+      };
+      return teluguWardMembers[ward] || defaultName;
+    }
+    return defaultName;
   };
 
   const filteredWards = data.wardMembers.filter(

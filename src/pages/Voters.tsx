@@ -73,8 +73,8 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
 
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-sans">
               {language === "te"
-                ? "పోలింగ్ కేంద్రాలు వేండ్ర గ్రామ ప్రభుత్వ ఉన్నత పాఠశాల ప్రాంగణంలో అమర్చబడతాయి. వృద్ధులు మరియు దివ్యాంగులకు అనుకూలంగా వీల్‌చైర్ కాంక్రీట్ ర్యాంపులు, భద్రతా సదుపాయాలు మరియు సహాయక క్యూ లైన్లు ఉన్నాయి."
-                : "Voting booths are located inside the central Government Junior High School complex. Both rooms are fully wheelchair accessible with concrete ramps, secure ballot lockers, electronic voting apparatus, and shaded queues for senior citizens."}
+                ? `పోలింగ్ కేంద్రాలు ${data.nameTe || data.name} గ్రామ ప్రభుత్వ ఉన్నత పాఠశాల ప్రాంగణంలో అమర్చబడతాయి. వృద్ధులు మరియు దివ్యాంగులకు అనుకూలంగా వీల్‌చైర్ కాంక్రీట్ ర్యాంపులు, భద్రతా సదుపాయాలు మరియు సహాయక క్యూ లైన్లు ఉన్నాయి.`
+                : `Voting booths are located inside the central Government Junior High School complex in ${data.name}. Both rooms are fully wheelchair accessible with concrete ramps, secure ballot lockers, electronic voting apparatus, and shaded queues for senior citizens.`}
             </p>
           </div>
         </GlassCard>
@@ -88,8 +88,8 @@ export const Voters: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
 
           <p className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">
             {language === "te"
-              ? "నమోదిత స్థానిక పౌరులు మా గ్రామ సచివాలయంలో కింది సేవలను పొందవచ్చు:"
-              : `Registered residents of ${data.name} can perform the following services at our local Panchayat Sachivalayam (Digital Assistant Sri Valluri Pradeep):`}
+              ? `నమోదిత స్థానిక పౌరులు ${data.nameTe || data.name} గ్రామ సచివాలయంలో కింది సేవలను పొందవచ్చు:`
+              : `Registered residents of ${data.name} can perform the following services at our local Panchayat Sachivalayam:`}
           </p>
 
           <ul className="space-y-2 text-xs">

@@ -7,12 +7,12 @@ import React from "react";
 import { useLanguage } from "../components/LanguageContext";
 import { SectionHeading, GlassCard } from "../components/UIComponents";
 import { LandAllocationAcreBar } from "../components/CustomCharts";
-import { Trees, Droplet, Zap, BookOpen, GraduationCap, LayoutGrid, CheckCircle } from "lucide-react";
+import { Trees, Droplet, Zap, BookOpen, GraduationCap, LayoutGrid, CheckCircle, Bath, Navigation, Building2 } from "lucide-react";
 import { DatabaseSchema } from "../types";
 
 export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
   const { language, t } = useLanguage();
-  const { land, water, infrastructure, education } = data;
+  const { land, water, infrastructure, education, sanitation, roads, facilities } = data;
 
   return (
     <div className="space-y-12">
@@ -70,6 +70,80 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
         </div>
       </section>
 
+      {/* Extended Infrastructure Summary (from extra DB fields) */}
+      <section>
+        <GlassCard hoverEffect={false} className="space-y-4">
+          <h3 className="text-lg font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            {language === "te" ? "విస్తృత వసతుల సారాంశం" : "Extended Infrastructure Summary"}
+          </h3>
+
+          <div className="text-sm text-slate-700 dark:text-slate-300 space-y-3">
+            {data.socialCategories && (
+              <p>
+                <strong>{language === "te" ? "సామాజిక వర్గాల జనसंఖ్యా:" : "Social categories:"}</strong>
+                {` SC: ${data.socialCategories.scPopulation ?? "N/A"}, ST: ${data.socialCategories.stPopulation ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.hospitals && (
+              <p>
+                <strong>{language === "te" ? "ఆసుపత్రులు:" : "Hospitals:"}</strong>
+                {` ${data.hospitals.total?.total ?? data.hospitals.total ?? "N/A"} total (Gov: ${data.hospitals.government?.total ?? data.hospitals.government ?? "N/A"}, Private: ${data.hospitals.private?.total ?? data.hospitals.private ?? "N/A"})`}
+              </p>
+            )}
+
+            {data.educationDetailed && (
+              <p>
+                <strong>{language === "te" ? "విద్య శ్రేణి:" : "Education:"}</strong>
+                {` Schools: ${data.educationDetailed.schools?.totalSchools ?? "N/A"}, Colleges: ${data.educationDetailed.colleges?.totalColleges ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.markets && (
+              <p>
+                <strong>{language === "te" ? "బజార్లు:" : "Markets:"}</strong>
+                {` Total markets: ${data.markets.totalMarkets ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.burialGrounds && (
+              <p>
+                <strong>{language === "te" ? "చైతన్య స్థలాలు:" : "Burial Grounds:"}</strong>
+                {` Total: ${data.burialGrounds.total ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.waterBodies && (
+              <p>
+                <strong>{language === "te" ? "జలాశయాలు:" : "Water bodies:"}</strong>
+                {` Tanks: ${data.waterBodies.totalTanks ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.streetLights && (
+              <p>
+                <strong>{language === "te" ? "వీధి దీపాలు:" : "Street lights:"}</strong>
+                {` Total lights: ${data.streetLights.totalLights ?? "N/A"}, Poles without lights: ${data.streetLights.polesWithoutLights ?? "N/A"}`}
+              </p>
+            )}
+
+            {data.trade && (
+              <p>
+                <strong>{language === "te" ? "వాణిజ్య గణాంకాలు:" : "Trade:"}</strong>
+                {` Businesses: ${data.trade.doTrades ?? "N/A"}, Market revenue: ₹${data.revenue?.marketRevenueLakhs ?? "N/A"} Lakhs`}
+              </p>
+            )}
+
+            {data.planning && (
+              <p>
+                <strong>{language === "te" ? "నిర్వాహణా ప్రణాళికలు:" : "Planning:"}</strong>
+                {` Approved layouts: ${data.planning.approvedLayoutPlans ?? "N/A"}`}
+              </p>
+            )}
+          </div>
+        </GlassCard>
+      </section>
+
       {/* split bottom: Water, Lights, and Education */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Drinking Water UtilityCard */}
@@ -86,30 +160,34 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
 
           <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 font-sans">
             <li className="flex justify-between items-center">
-              <span>{language === "te" ? "ప్రధాన నీటి వనరు:" : "Main Bore Well Source:"}</span>
+              <span>{language === "te" ? "ప్రధాన నీటి వనరు:" : "Main Water Source:"}</span>
               <span className="font-semibold text-slate-900 dark:text-white">
-                {language === "te" ? "చితపల్లి సమీపంలో" : "Near Chithapalli"}
+                {language === "te" && water.source === "Near Chithapalli" ? "చితపల్లి సమీపంలో" : (water.source || "N/A")}
               </span>
             </li>
             <li className="flex justify-between items-center">
-              <span>{language === "te" ? "ఓవర్‌హెడ్ ట్యాంక్ సామర్థ్యం:" : "Overhead Tank Capacity:"}</span>
+              <span>{language === "te" ? "ఓవర్‌హెడ్/SS ట్యాంక్ సామర్థ్యం:" : "Tank Capacity:"}</span>
               <span className="font-semibold text-slate-900 dark:text-white">
-                {language === "te" ? "1,20,000 లీటర్లు" : "1,20,000 Litres"}
+                {water.ssTankCapacityMl ? `${water.ssTankCapacityMl} ML` : (water.overheadTankLitres ? `${water.overheadTankLitres.toLocaleString()} L` : "N/A")}
               </span>
             </li>
             <li className="flex justify-between items-center">
               <span>{language === "te" ? "రోజువారీ నీటి సరఫరా (మనిషికి):" : "Supply Per Person Per Day:"}</span>
               <span className="font-semibold text-slate-900 dark:text-white">
-                {language === "te" ? "55 లీటర్లు" : "55 Litres"}
+                {water.supplyPerHeadLitresDay ? `${water.supplyPerHeadLitresDay} Litres` : "N/A"}
               </span>
             </li>
             <li className="flex justify-between items-center">
+              <span>{language === "te" ? "పైపుల ద్వారా కవరేజ్ (శాతం):" : "Piped Water Coverage:"}</span>
+              <span className="font-semibold text-slate-900 dark:text-white font-mono">{water.areaCoveredByPipedWaterPercent ? `${water.areaCoveredByPipedWaterPercent}%` : "N/A"}</span>
+            </li>
+            <li className="flex justify-between items-center">
               <span>{language === "te" ? "వ్యక్తిగత కనెక్షన్లు:" : "Installed Private Taps:"}</span>
-              <span className="font-semibold text-slate-900 dark:text-white font-mono">{water.privateTaps}</span>
+              <span className="font-semibold text-slate-900 dark:text-white font-mono">{water.privateTaps ?? "N/A"}</span>
             </li>
             <li className="flex justify-between items-center">
               <span>{language === "te" ? "ప్రజా స్టాండ్ కుళాయిలు:" : "Active Public Stand Taps:"}</span>
-              <span className="font-semibold text-slate-900 dark:text-white font-mono">{water.publicTaps}</span>
+              <span className="font-semibold text-slate-900 dark:text-white font-mono">{water.publicTaps ?? "N/A"}</span>
             </li>
           </ul>
         </GlassCard>
@@ -156,16 +234,30 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
 
           <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 font-sans">
             <li className="flex justify-between items-center">
-              <span>{language === "te" ? "ప్రభుత్వ ప్రాథమిక పాఠశాలలు:" : "Government Primary Schools:"}</span>
-              <span className="font-bold text-slate-900 dark:text-white">{education.govtSchools} {language === "te" ? "కేంద్రాలు" : "Centers"}</span>
+              <span>{language === "te" ? "ప్రభుత్వ ప్రాథమిక పాఠశాలలు:" : "Primary/Elementary Schools:"}</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {(education.elementarySchools || education.govtSchools) ?? 0} {language === "te" ? "కేంద్రాలు" : "Centers"}
+              </span>
             </li>
             <li className="flex justify-between items-center">
               <span>{language === "te" ? "ప్రభుత్వ ఉన్నత పాఠశాలలు:" : "Government High Schools:"}</span>
-              <span className="font-bold text-slate-900 dark:text-white">{education.highSchools} {language === "te" ? "పాఠశాల" : "Institution"}</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {education.highSchools ?? 0} {language === "te" ? "పాఠశాల" : "Institution"}
+              </span>
             </li>
+            {education.juniorColleges && (
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "జూనియర్ కళాశాలలు:" : "Junior Colleges:"}</span>
+                <span className="font-bold text-slate-900 dark:text-white">
+                  {education.juniorColleges} {language === "te" ? "కళాశాల" : "College"}
+                </span>
+              </li>
+            )}
             <li className="flex justify-between items-center">
               <span>{language === "te" ? "క్రియాశీల అంగన్‌వాడీ కేంద్రాలు:" : "Active Anganwadi Centers:"}</span>
-              <span className="font-bold text-slate-900 dark:text-white">{education.anganwadiCenters} {language === "te" ? "కేంద్రాలు" : "Locations"}</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {education.anganwadiCenters ?? 0} {language === "te" ? "కేంద్రాలు" : "Locations"}
+              </span>
             </li>
             <li className="pt-2 text-slate-400 leading-snug text-[10px]">
               {language === "te"
@@ -174,6 +266,99 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
             </li>
           </ul>
         </GlassCard>
+      </section>
+
+      {/* Row 3: Sanitation, Roads, Facilities */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Sanitation Card */}
+        {sanitation && (
+          <GlassCard hoverEffect={false} className="space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-base font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Bath className="w-5 h-5 text-teal-500 shrink-0" />
+                {language === "te" ? "పారిశుద్ధ్యం" : "Sanitation"}
+              </h3>
+            </div>
+            <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 font-sans">
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "పారిశుద్ధ్య కార్మికులు (శాశ్వత/కాంట్రాక్ట్):" : "Sanitation Workers (Perm/Contract):"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{sanitation.permanentWorkers || 0} / {sanitation.contractWorkers || 0}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "కమ్యూనిటీ మరుగుదొడ్లు:" : "Community Toilets:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{sanitation.communityToilets || 0}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "మరుగుదొడ్లు ఉన్న ఇళ్లు:" : "Households with Toilets:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{sanitation.householdsWithToilets || 0}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "మరుగుదొడ్లు లేని ఇళ్లు:" : "Households without Toilets:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{sanitation.householdsWithoutToilets || 0}</span>
+              </li>
+            </ul>
+          </GlassCard>
+        )}
+
+        {/* Roads & Drainage Card */}
+        {roads && (
+          <GlassCard hoverEffect={false} className="space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-base font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Navigation className="w-5 h-5 text-indigo-500 shrink-0" />
+                {language === "te" ? "రహదారులు & డ్రైనేజీ" : "Roads & Drainage"}
+              </h3>
+            </div>
+            <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 font-sans">
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "మునిసిపల్ రోడ్లు (కి.మీ):" : "Municipal Roads (Km):"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{roads.municipalRoadsKm?.total || "N/A"}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "R&B రోడ్లు (కి.మీ):" : "R&B Roads (Km):"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{roads.rbRoadsKm?.total || "N/A"}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "జాతీయ రహదారి (కి.మీ):" : "National Highways (Km):"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{roads.nationalHighwaysKm || "N/A"}</span>
+              </li>
+            </ul>
+          </GlassCard>
+        )}
+
+        {/* Trade & Facilities Card */}
+        {facilities && (
+          <GlassCard hoverEffect={false} className="space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-base font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-rose-500 shrink-0" />
+                {language === "te" ? "వాణిజ్యం & వసతులు" : "Trade & Facilities"}
+              </h3>
+            </div>
+            <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 font-sans">
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "హోటళ్ళు / లాడ్జీలు:" : "Hotels / Lodges:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">
+                  {facilities.hotels ?? 0} / {facilities.lodges ?? 0}
+                </span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "కళ్యాణ మండపాలు:" : "Function Halls:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{facilities.functionHalls ?? 0}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "సినిమా థియేటర్లు:" : "Theatres:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">{facilities.theatres ?? 0}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span>{language === "te" ? "బ్యాంకు శాఖలు / మీసేవ:" : "Bank Branches / MeeSeva:"}</span>
+                <span className="font-semibold text-slate-900 dark:text-white font-mono">
+                  {facilities.bankBranches ?? 0} / {facilities.meeSevaCentres ?? 0}
+                </span>
+              </li>
+            </ul>
+          </GlassCard>
+        )}
       </section>
     </div>
   );

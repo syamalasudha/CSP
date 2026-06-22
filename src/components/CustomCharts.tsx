@@ -42,7 +42,7 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
           Voter Demographics
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-          Distribution statistics across 2,187 registered voters
+          {`Distribution statistics across ${total} registered voters`}
         </p>
       </div>
 
@@ -81,7 +81,7 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
           {/* Central tooltip */}
           <div className="absolute flex flex-col items-center text-center">
             <span className="text-2xl font-display font-black text-slate-800 dark:text-white">
-              {hoveredIndex !== null ? categories[hoveredIndex].value : 2187}
+              {hoveredIndex !== null ? categories[hoveredIndex].value : total}
             </span>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
               {hoveredIndex !== null ? categories[hoveredIndex].name : "Total Voters"}
@@ -92,7 +92,7 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
         {/* Legend list */}
         <div className="space-y-2.5">
           {categories.map((cat, i) => {
-            const perc = ((cat.value / 2187) * 100).toFixed(1);
+            const perc = total > 0 ? ((cat.value / total) * 100).toFixed(1) : "0.0";
             return (
               <div
                 key={cat.name}
@@ -108,9 +108,9 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
                     {cat.name}
                   </span>
                 </div>
-                <span className="text-xs font-mono font-bold text-slate-900 dark:text-white text-right">
-                  {cat.value} <span className="text-[10px] text-slate-400">({perc}%)</span>
-                </span>
+                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-white text-right">
+                    {cat.value} <span className="text-[10px] text-slate-400">({perc}%)</span>
+                  </span>
               </div>
             );
           })}

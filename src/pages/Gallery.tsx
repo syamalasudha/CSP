@@ -31,10 +31,11 @@ export const Gallery: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
   const getLocalizedImageTitle = (item: GalleryItem) => {
     if (language !== "te") return item.title;
     // Localize the gallery items in our mock database
-    if (item.title.includes("Sachivalayam")) return "వేండ్ర డిజిటల్ గ్రామ సచివాలయ భవనం";
+    const villageName = data.nameTe || data.name || "గ్రామ";
+    if (item.title.includes("Sachivalayam")) return `${villageName} డిజిటల్ గ్రామ సచివాలయ భవనం`;
     if (item.title.includes("Overhead Clean Water")) return "మంచి నీటి ఓవర్‌హెడ్ రిజర్వాయర్ ట్యాంక్ (1.2 లక్షల లీటర్లు)";
-    if (item.title.includes("Gram Sabha")) return "గ్రామ సభ సమావేశంలో చర్చలు - వేండ్ర";
-    if (item.title.includes("Paddy Harvest")) return "వేండ్ర పొలాలలో వరి కోతల ఉత్సవం";
+    if (item.title.includes("Gram Sabha")) return `గ్రామ సభ సమావేశంలో చర్చలు - ${villageName}`;
+    if (item.title.includes("Paddy Harvest")) return `${villageName} పొలాలలో వరి కోతల ఉత్సవం`;
     if (item.title.includes("Smart Classrooms")) return "ప్రభుత్వ హైస్కూలు డిజిటల్ స్మార్ట్ తరగతి గది";
     if (item.title.includes("Health Screening")) return "సచివాలయ వైఎస్ఆర్ క్లినిక్ ఆరోగ్య శిబిరం";
     return item.title;

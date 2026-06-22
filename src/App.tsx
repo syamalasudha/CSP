@@ -181,6 +181,7 @@ export default function App() {
       case "contact":
         return (
           <Contact
+            data={portalData}
             onSuccess={(m) => addToast("success", m)}
             onError={(m) => addToast("error", m)}
             onNavigateHome={() => {
@@ -243,7 +244,7 @@ export default function App() {
             </main>
           )}
 
-          <Footer selectedVillage={selectedVillage} />
+          <Footer selectedVillage={selectedVillage} data={portalData} />
           <ToastContainer toasts={toasts} removeToast={removeToast} />
         </div>
       </ThemeProvider>

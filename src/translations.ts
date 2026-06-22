@@ -98,6 +98,12 @@ export const translations = {
     // Page titles and subtitle descriptions
     about_title: "The Legacy of Vendra Village",
     about_subtitle: "Explore our historical foundation, geographic assets, socio-economic fabric, and our vision towards a model smart village.",
+    agriculture_title: "Agriculture & Village Infrastructure",
+    agriculture_subtitle: "Land use, water supply, lighting, education and public amenities overview.",
+    agriculture_survey_no: "Survey & Land Records",
+    agriculture_water_source: "Drinking Water & Supply",
+    agriculture_lighting: "Street Lighting",
+    agriculture_education: "Education & Schools",
     admin_title: "Village Gram Panchayat Administration",
     admin_subtitle: "Meet Vendra's primary legislative body, led by the Sarpanch and representing all 12 electoral ward boundaries.",
     directory_title: "Administrative Staff Directory",
@@ -210,6 +216,9 @@ export const translations = {
     total_voters: "Total Registered Voters",
     voter_gender_ratio: "Electoral Gender Balance",
     voter_category_ratio: "Electors Category Profile",
+    // Single-voter page headings (used by Voters.tsx)
+    voter_title: "Voter Demographics & Elector Roll",
+    voter_subtitle: "Registered electors in this village: {voters.totalVoters}",
 
     // Forms & Grievance Lodging
     form_title: "Panchayat Grievance Form",
@@ -371,6 +380,12 @@ export const translations = {
     // Page titles and subtitle descriptions
     about_title: "వేండ్ర గ్రామ చారిత్రక వైభవం",
     about_subtitle: "గ్రామ పునాదులు, సహజ వనరులు, సామాజిక-ఆర్థిక వ్యవస్థ మరియు ఒక ఆదర్శ డిజిటల్ స్మార్ట్ విలేజ్ దిశగా మా ప్రయాణాన్ని అన్వేషించండి.",
+    agriculture_title: "వ్యవసాయం & గ్రామ సదుపాయాల చెక్క",
+    agriculture_subtitle: "భూమి వినియోగం, నీటి సరఫరా, వీధి లైటింగ్, విద్యా మరియు ప్రజా సదుపాయాల సమగ్ర అవలోకనం.",
+    agriculture_survey_no: "సర్వే & భూమి నమోదు వివరాలు",
+    agriculture_water_source: "తాగునీటి సరఫరా",
+    agriculture_lighting: "వీధి లైటింగ్",
+    agriculture_education: "విద్య & పాఠశాలలు",
     admin_title: "గ్రామ పంచాయతీ పాలన",
     admin_subtitle: "సర్పంచ్ గారి నేతృత్వంలోని వేండ్ర గ్రామ పరిపాలనా యంత్రాంగం మరియు 12 వార్డుల సభ్యుల వివరాలు.",
     directory_title: "లాయల్ స్టాఫ్ డైరెక్టరీ",
@@ -483,6 +498,9 @@ services_subtitle:
     total_voters: "మొత్తం నమోదైన ఓటర్లు",
     voter_gender_ratio: "ఓటర్ల లింగ నిష్పత్తి సమతుల్యత",
     voter_category_ratio: "ఓటర్ల సామాజిక వర్గ వివరాలు",
+    // Single-voter page headings (used by Voters.tsx)
+    voter_title: "ఓటర్లు — జనాభా & నమోదు వివరాలు",
+    voter_subtitle: "గ్రామంలోని నమోదు చేసిన ఓటర్లు: {voters.totalVoters}",
 
     // Forms & Grievance Lodging
     form_title: "సచివాలయ గ్రీవెన్స్ ఫిర్యాదు పత్రం",

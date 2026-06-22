@@ -121,7 +121,63 @@ async function startServer() {
   // --- DATA GET & FETCH API ---
   app.get("/api/data", (req, res) => {
     try {
-      const db = readDB();
+      const db: any = readDB();
+
+      // Normalize village entries: ensure new keys exist across all villages so UI can safely read them.
+      if (db && Array.isArray(db.villages)) {
+        db.villages = db.villages.map((v: any) => {
+          // socialCategories (derive from demographics when available)
+          v.socialCategories = v.socialCategories || {
+            scPopulation: v.demographics?.scPopulation ?? null,
+            stPopulation: v.demographics?.stPopulation ?? null,
+          };
+
+          // hospitals: normalize to detailed shape if only simple counts present
+          if (!v.hospitals || typeof v.hospitals !== "object" || Array.isArray(v.hospitals)) {
+            v.hospitals = { municipal: {}, government: {}, private: {}, total: {} };
+          } else {
+            // if existing structure is simple counts, promote them
+            const h = v.hospitals;
+            if (typeof h.government === "number" || typeof h.private === "number" || typeof h.total === "number") {
+              v.hospitals = {
+                municipal: h.municipal || { allopathic: 0, homeopathic: 0, ayurvedic: 0, unani: 0, veterinary: 0, total: 0 },
+                government: typeof h.government === "object" ? h.government : { allopathic: h.government ?? null, veterinary: null, total: h.government ?? null },
+                private: typeof h.private === "object" ? h.private : { allopathic: h.private ?? null, total: h.private ?? null },
+                total: typeof h.total === "object" ? h.total : { allopathic: h.total ?? null, veterinary: null, total: h.total ?? null },
+              };
+            }
+          }
+
+          // educationDetailed: provide nested structure derived from existing `education` when available
+          v.educationDetailed = v.educationDetailed || {
+            schools: {
+              zpMpElementary: v.education?.elementarySchools ?? v.education?.govtSchools ?? null,
+              zpMpUpperPrimary: v.education?.upperPrimary ?? null,
+              zpMpHighSchools: v.education?.highSchools ?? null,
+              privateHighSchools: null,
+              totalSchools: null,
+            },
+            colleges: {
+              governmentJuniorColleges: v.education?.juniorColleges ?? null,
+              privateDegreeColleges: null,
+              totalColleges: null,
+            },
+            trainingCentres: v.education?.trainingCentres ? { others: v.education.trainingCentres as any } : {},
+          };
+
+          // Markets, burial grounds, parks, water bodies, street lights, trade, planning - empty defaults
+          v.markets = v.markets || { vegetableMarkets: null, fruitMarkets: null, flowerMarkets: null, rythuBazars: null, muttonMarkets: null, fishMarkets: null, others: null, totalMarkets: null };
+          v.burialGrounds = v.burialGrounds || { hindu: null, muslim: null, christian: null, others: null, total: null };
+          v.parks = v.parks || { totalParks: null };
+          v.waterBodies = v.waterBodies || { municipalTanks: null, governmentTanks: null, otherTanks: null, totalTanks: null };
+          v.streetLights = v.streetLights || { highMastJunctions: null, svLamps: null, mvLamps: null, tubeLights: null, solarLights: null, ledLights: null, totalLights: null, polesWithoutLights: null };
+          v.trade = v.trade || { doTrades: null, doTradeDemand: null, hotels: null, lodges: null, theatres: null, functionHalls: null, fireStations: null };
+          v.planning = v.planning || { approvedLayoutPlans: null, layoutOpenSpaces: null };
+
+          return v;
+        });
+      }
+
       res.json(db);
     } catch (err) {
       console.error("Error handling /api/data", { err, path: req.path, method: req.method, headers: req.headers });

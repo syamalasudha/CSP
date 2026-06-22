@@ -9,14 +9,16 @@ import { SectionHeading, GlassCard } from "../components/UIComponents";
 import { Phone, Mail, MapPin, Send, HelpCircle, Check, Loader2 } from "lucide-react";
 
 interface ContactProps {
+  data: DatabaseSchema;
   onSuccess: (msg: string) => void;
   onError: (msg: string) => void;
   onNavigateHome: () => void;
 }
 
 import { API_BASE, apiUrl } from "../config/api";
+import { DatabaseSchema } from "../types";
 
-export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigateHome }) => {
+export const Contact: React.FC<ContactProps> = ({ data, onSuccess, onError, onNavigateHome }) => {
   const { language, t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
@@ -24,6 +26,24 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigate
     phone: "",
     message: "",
   });
+
+  let phone = "N/A";
+  let email = `${data.id}.panchayat@ap.gov.in`;
+
+  if (data) {
+    if ((data as any).communication?.phone) {
+      phone = (data as any).communication.phone;
+    } else if (data.officials && data.officials.length > 0) {
+      const sec = data.officials.find((o) => o.designation.toLowerCase().includes("secretary")) || data.officials[0];
+      if (sec.contact) {
+        phone = sec.contact;
+      }
+    }
+    
+    if ((data as any).communication?.email && (data as any).communication.email.length > 0) {
+      email = (data as any).communication.email[0];
+    }
+  }
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -92,7 +112,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigate
                   <span className="font-bold text-slate-900 dark:text-white block font-display">
                     {language === "te" ? "సచివాలయ సహాయ కేంద్రం" : "Secretary Call desk"}
                   </span>
-                  <span>+91-9573930799 ({language === "te" ? "ఉదయం 10:00 నుండి సాయంత్రం 5:00 వరకు" : "Office hours 10 AM - 5 PM"})</span>
+                  <span>{phone !== "N/A" ? `+91-${phone}` : "N/A"} ({language === "te" ? "ఉదయం 10:00 నుండి సాయంత్రం 5:00 వరకు" : "Office hours 10 AM - 5 PM"})</span>
                 </div>
               </li>
 
@@ -102,7 +122,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess, onError, onNavigate
                   <span className="font-bold text-slate-900 dark:text-white block font-display">
                     {language === "te" ? "ఇమెయిల్ సేవ" : "Email Service"}
                   </span>
-                  <span>vendra.panchayat@ap.gov.in</span>
+                  <span className="break-all">{email}</span>
                 </div>
               </li>
             </ul>

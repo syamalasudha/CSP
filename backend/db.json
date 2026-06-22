@@ -14,6 +14,18 @@
         "totalWards": 12,
         "totalHouseholds": 1109
       },
+      "about": {
+        "history_p1": "Vendra is a progressive, agricultural-centric village located in the fertile delta region of Pedapudi Mandal, Kakinada District. Established as an active Gram Panchayat, the village acts as a vital model hub under Andhra Pradesh's localized governance system.",
+        "history_p2": "With 12 active electoral wards, a community-driven public secretariat, and a highly active local council, Vendra has pioneered efforts in standard municipal systems, secure drinking water infrastructure, and extensive social-welfare mapping.",
+        "landscape_p1": "Spanning 5.72 square kilometers, Vendra's primary landscape is dominated by rich paddy cultivation. The village maintains an extensive agricultural footprint of 1,413.58 Aayakattu acres, sustained by perennial canal distribution of the Godavari river.",
+        "landscape_p2": "Beyond farming, Vendra has established a multi-layered social fabric where over 85 active Self Help Groups (SHGs) lead public financial microcredit programs, while specialized educational and wellness facilities sustain regional livelihoods.",
+        "vision_p1": "By integrating digital infrastructure with grassroots governance, Vendra Panchayat is transitioning into a zero-leakage, 100% transparent smart digital hub. Our grievance secretariats strive to resolve public disputes in under 48 hours.",
+        "history_p1_te": "వేండ్ర అనేది కాకినాడ జిల్లా పెదపూడి మండలంలోని పచ్చని పొలాలు అత్యంత సారవంతమైన డెల్టా పరివాహక ప్రాంతంలో ఉన్న ఒక ప్రగతిశీల వ్యవసాయ ఆధారిత గ్రామం. ఇది ఒక క్రియాశీల గ్రామ పంచాయతీగా అవతరించి, ఆంధ్రప్రదేశ్ వికేంద్రీకరణ వ్యవస్థలో ప్రధాన ఆదర్శ నమూనాగా నిలుస్తోంది.",
+        "history_p2_te": "12 క్రియాశీల ఎన్నికల వార్డులు, సుసంపన్నమైన గ్రామ సచివాలయ వ్యవస్థ మరియు నిరంతరం శ్రమించే ప్రజాప్రతినిధుల సహాయంతో, వేండ్ర గ్రామం సురక్షిత మునిసిపల్ తాగునీరు, మెరుగైన క్లినిక్ సదుపాయాలను మెరుగుపర్చింది.",
+        "landscape_p1_te": "5.72 చదరపు కిలోమీటర్ల వైశాల్యం కలిగిన వేండ్ర ప్రధానంగా వరి సాగుకు ప్రసిద్ధి పొందింది. గోదావరి కెనాల్ అనుసంధానం ద్వారా నిరంతరం నీటి పారుదల పొందుతూ 1,413.58 ఆయకట్టు ఎకరాల విస్తీర్ణంతో వర్ధిల్లుతోంది.",
+        "landscape_p2_te": "వ్యవసాయానికి మించి, వేండ్ర గ్రామం 85 కు పైగా స్వయం సహాయక బృందాల (SHG) ద్వారా ప్రజలకు మైక్రోక్రెడిట్ రుణాలను విజయవంతంగా అందిస్తోంది.",
+        "vision_p1_te": "గ్రాస్ రూట్ పరిపాలనకు డిజిటల్ టెక్నాలజీని జోడించడం ద్వారా వేండ్ర సంక్షేమ ఫలాల పంపిణీలో 100% పారదర్శకతను సాధిస్తోంది. మా సచివాలయం ప్రజల ఫిర్యాదులను గరిష్టంగా 48 గంటల్లో పరిష్కరిస్తుంది."
+      },
       "officials": [
         {
           "designation": "Sarpanch",
@@ -280,6 +292,11 @@
         "ledStreetLights": 240,
         "ccmsBoxes": 3
       },
+      "location": {
+        "sachivalayamCode": "10590885",
+        "distanceToDistrictHqKm": 18,
+        "distanceToMandalHqKm": 6.5
+      },
       "announcements": [
         {
           "id": "ann-1",
@@ -357,6 +374,18 @@
         "areaSqKm": 4.23,
         "totalWards": null,
         "totalHouseholds": 1332
+      },
+      "about": {
+        "history_p1": "Information not available.",
+        "history_p2": "Information not available.",
+        "landscape_p1": "Information not available.",
+        "landscape_p2": "Information not available.",
+        "vision_p1": "Information not available.",
+        "history_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "history_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "vision_p1_te": "సమాచారం అందుబాటులో లేదు."
       },
       "officials": [],
       "wardMembers": [],
@@ -454,27 +483,39 @@
       "name": "Gollaprolu",
       "nameTe": "గొల్లప్రోలు",
       "type": "Municipality",
-      "grade": "Grade-III Municipality",
+      "grade": "Nagara Panchayat",
       "mandal": "Gollaprolu",
       "mandalTe": "గొల్లప్రోలు",
       "district": "Kakinada",
       "districtTe": "కాకినాడ",
       "stats": {
-        "population": null,
-        "areaSqKm": null,
+        "population": 23882,
+        "areaSqKm": 6.4,
         "totalWards": 20,
-        "totalHouseholds": null
+        "totalHouseholds": 5319
+      },
+      "about": {
+        "history_p1": "Information not available.",
+        "history_p2": "Information not available.",
+        "landscape_p1": "Information not available.",
+        "landscape_p2": "Information not available.",
+        "vision_p1": "Information not available.",
+        "history_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "history_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "vision_p1_te": "సమాచారం అందుబాటులో లేదు."
       },
       "officials": [],
       "wardMembers": [],
       "voters": {
         "totalPollingStations": null,
-        "maleVoters": null,
-        "femaleVoters": null,
+        "maleVoters": 10500,
+        "femaleVoters": 8370,
         "bcVoters": null,
         "scVoters": null,
         "stVoters": null,
-        "totalVoters": null
+        "totalVoters": 18870
       },
       "staff": [],
       "land": {
@@ -489,9 +530,34 @@
         "totalKhathas": null
       },
       "education": {
-        "govtSchools": null,
-        "highSchools": null,
-        "anganwadiCenters": null
+        "govtSchools": 11,
+        "highSchools": 5,
+        "anganwadiCenters": null,
+        "elementarySchools": 6,
+        "juniorColleges": 1,
+        "trainingCentres": "DRDA"
+      },
+      "educationDetailed": {
+        "schools": {
+          "zpMpElementary": 6,
+          "zpMpUpperPrimary": 3,
+          "zpMpHighSchools": 2,
+          "privateHighSchools": 3,
+          "totalSchools": 14
+        },
+        "colleges": {
+          "governmentJuniorColleges": 1,
+          "privateDegreeColleges": 1,
+          "totalColleges": 2
+        },
+        "trainingCentres": {
+          "drda": 0,
+          "icds": 0,
+          "dtc": 0,
+          "bankers": 0,
+          "computerCentres": 0,
+          "others": 0
+        }
       },
       "health": {
         "hasWellnessCentre": null,
@@ -503,18 +569,36 @@
         "tricycles": null
       },
       "water": {
-        "source": null,
-        "overheadTankLitres": null,
-        "supplyPerHeadLitresDay": null,
+        "source": "Surface water & Ground Water",
+        "overheadTankLitres": 520000,
+        "supplyPerHeadLitresDay": 110,
         "publicTaps": null,
-        "privateTaps": null
+        "privateTaps": 2110,
+        "ssTankCapacityMl": 90,
+        "ssTankAreaAcres": 9,
+        "filterBedCapacityMld": 3,
+        "elsrCapacity": "0.12 ML, 0.00 ML, 0.15 ML, 0.25 ML",
+        "distributionLineLengthKm": 45,
+        "householdsCoveredByPipedWater": 5311,
+        "areaCoveredByPipedWaterPercent": 80,
+        "uncoveredHouseholds": 250,
+        "uncoveredAreaPercent": 15,
+        "householdsCoveredThroughTransportation": 2000,
+        "transportationCoveragePercent": 15,
+        "waterSupplyFrequency": "Once per day",
+        "supplyDurationHours": 1.5,
+        "residentialMeteredConnections": 0,
+        "residentialNonMeteredConnections": 2110,
+        "commercialConnections": 0,
+        "bulkConnections": 0,
+        "waterTariff": "Rs.60 per month"
       },
       "ration": {
         "fairPriceShops": null,
         "riceCards": null
       },
       "shg": {
-        "totalGroups": null,
+        "totalGroups": 266,
         "groupsWithBankLoans": null,
         "totalLoanAmountLakhs": null
       },
@@ -535,18 +619,197 @@
         "ccmsBoxes": null
       },
       "demographics": {
-        "malePopulation": null,
-        "femalePopulation": null,
-        "sexRatio": null,
+        "malePopulation": 12071,
+        "femalePopulation": 11811,
+        "sexRatio": 978,
         "children0to6": null,
         "workingPopulation": null,
         "mainWorkers": null,
-        "marginalWorkers": null
+        "marginalWorkers": null,
+        "scPopulation": 3106,
+        "stPopulation": 70
+      },
+      "socialCategories": {
+        "scPopulation": 3106,
+        "stPopulation": 70
       },
       "location": {
         "pinCode": "533445",
         "nearestTown": "Kakinada",
-        "distanceToNearestTownKm": 18
+        "distanceToNearestTownKm": 21,
+        "latitude": 17.1672,
+        "longitude": 82.2847,
+        "distanceToStateCapitalKm": 472,
+        "distanceToAirportKm": 75,
+        "nearestAirport": "Rajahmundry",
+        "distanceToSeaportKm": 21,
+        "nearestSeaport": "Kakinada",
+        "nearestRiver": "Yeleru",
+        "distanceToRiverKm": 0,
+        "nearestNationalHighway": "NH 214",
+        "distanceToNationalHighwayKm": 0,
+        "nearestTouristPlace": "Lord Padagaya Punyakshetram",
+        "distanceToTouristPlaceKm": 7,
+        "nearestUniversity": "Jawaharlal Nehru Technological University, Kakinada"
+      },
+      "communication": {
+        "website": null,
+        "email": [
+          "glp.mpl2011@gmail.com",
+          "glrp_mpl@rediffmail.com"
+        ],
+        "phone": "08869-231547",
+        "fax": "08869-231547",
+        "wirelessCommunicationAvailable": false,
+        "cctvAvailable": false
+      },
+      "climate": {
+        "averageRainfallMm": 1300,
+        "minimumTemperatureC": 28,
+        "maximumTemperatureC": 43,
+        "humidityPercent": 75
+      },
+      "literacy": {
+        "maleLiterate": 6490,
+        "femaleLiterate": 6102,
+        "totalLiterate": 12592,
+        "maleLiteracyRate": 62,
+        "femaleLiteracyRate": 64,
+        "overallLiteracyRate": 63
+      },
+      "slums": {
+        "notifiedSlums": 3,
+        "nonNotifiedSlums": 7,
+        "totalSlums": 10,
+        "slumPopulation": 8945,
+        "slumHouseholds": 1789,
+        "shgsInSlums": 266,
+        "shgMembers": 2926
+      },
+      "facilities": {
+        "crcCentres": 0,
+        "mahilaSwasakthiBhavans": 1,
+        "meeSevaCentres": 3,
+        "bankBranches": 3,
+        "hotels": 3,
+        "lodges": 1,
+        "theatres": 1,
+        "functionHalls": 3,
+        "fireStations": 0
+      },
+      "markets": {
+        "vegetableMarkets": 1,
+        "fruitMarkets": 0,
+        "flowerMarkets": 0,
+        "rythuBazars": 0,
+        "muttonMarkets": 1,
+        "fishMarkets": 0,
+        "others": 0,
+        "totalMarkets": 1
+      },
+      "burialGrounds": {
+        "hindu": 2,
+        "muslim": 1,
+        "christian": 1,
+        "others": 0,
+        "total": 4
+      },
+      "parks": {
+        "totalParks": 0
+      },
+      "waterBodies": {
+        "municipalTanks": 4,
+        "governmentTanks": 0,
+        "otherTanks": 0,
+        "totalTanks": 4
+      },
+      "streetLights": {
+        "highMastJunctions": 0,
+        "svLamps": 25,
+        "mvLamps": 0,
+        "tubeLights": 750,
+        "solarLights": 0,
+        "ledLights": 0,
+        "totalLights": 775,
+        "polesWithoutLights": 50
+      },
+      "trade": {
+        "doTrades": 405,
+        "doTradeDemand": 236615,
+        "hotels": 3,
+        "lodges": 1,
+        "theatres": 1,
+        "functionHalls": 3,
+        "fireStations": 0
+      },
+      "planning": {
+        "approvedLayoutPlans": 1,
+        "layoutOpenSpaces": 1
+      },
+      "hospitals": {
+        "municipal": {
+          "allopathic": 0,
+          "homeopathic": 0,
+          "ayurvedic": 0,
+          "unani": 0,
+          "veterinary": 0,
+          "total": 0
+        },
+        "government": {
+          "allopathic": 1,
+          "veterinary": 1,
+          "total": 2
+        },
+        "private": {
+          "allopathic": 3,
+          "total": 3
+        },
+        "total": {
+          "allopathic": 4,
+          "veterinary": 1,
+          "total": 5
+        }
+      },
+      "sanitation": {
+        "permanentWorkers": 9,
+        "contractWorkers": 40,
+        "totalWorkers": 49,
+        "tricycles": 6,
+        "communityToilets": 19,
+        "publicToilets": 0,
+        "householdsWithToilets": 4089,
+        "householdsWithoutToilets": 1230,
+        "slaughterHouses": 0
+      },
+      "revenue": {
+        "propertyTaxAssessments": 5319,
+        "propertyTaxDemandLakhs": 25.0,
+        "advertisementTaxLakhs": 0.25,
+        "nonTaxDemandLakhs": 43.41,
+        "totalDemandLakhs": 85.21,
+        "marketRevenueLakhs": 6.0,
+        "shoppingComplexes": 5,
+        "shopRooms": 45,
+        "shopRentRevenueLakhs": 2.47
+      },
+      "roads": {
+        "municipalRoadsKm": {
+          "cc": 16.1,
+          "bt": 0,
+          "metal": 0,
+          "wbm": 14.5,
+          "earthen": 15.0,
+          "total": 45.6
+        },
+        "rbRoadsKm": {
+          "cc": 1.9,
+          "bt": 1.0,
+          "metal": 0,
+          "wbm": 0,
+          "earthen": 0,
+          "total": 2.9
+        },
+        "nationalHighwaysKm": 2.5
       },
       "announcements": [],
       "gallery": [],
@@ -565,6 +828,18 @@
         "areaSqKm": 5.31,
         "totalWards": null,
         "totalHouseholds": 1222
+      },
+      "about": {
+        "history_p1": "Information not available.",
+        "history_p2": "Information not available.",
+        "landscape_p1": "Information not available.",
+        "landscape_p2": "Information not available.",
+        "vision_p1": "Information not available.",
+        "history_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "history_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p1_te": "సమాచారం అందుబాటులో లేదు.",
+        "landscape_p2_te": "సమాచారం అందుబాటులో లేదు.",
+        "vision_p1_te": "సమాచారం అందుబాటులో లేదు."
       },
       "officials": [],
       "wardMembers": [],

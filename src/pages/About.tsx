@@ -30,7 +30,7 @@ export const About: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
             {t("about_card_landscape")}
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-sans">
-            {t("about_landscape_p1")}
+            {language === "te" ? (data.about?.landscape_p1_te || data.about?.landscape_p1 || "సమాచారం అందుబాటులో లేదు.") : (data.about?.landscape_p1 || "Information not available.")}
           </p>
         </GlassCard>
 
@@ -42,7 +42,9 @@ export const About: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
             {t("about_card_history")}
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-sans">
-            {t("about_history_p1")} {t("about_history_p2")}
+            {language === "te" ? (data.about?.history_p1_te || data.about?.history_p1 || "సమాచారం అందుబాటులో లేదు.") : (data.about?.history_p1 || "Information not available.")}
+            {" "}
+            {language === "te" ? (data.about?.history_p2_te || data.about?.history_p2 || "") : (data.about?.history_p2 || "")}
           </p>
         </GlassCard>
 
@@ -54,7 +56,7 @@ export const About: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
             {t("about_card_vision")}
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-sans">
-            {t("about_vision_p1")}
+            {language === "te" ? (data.about?.vision_p1_te || data.about?.vision_p1 || "సమాచారం అందుబాటులో లేదు.") : (data.about?.vision_p1 || "Information not available.")}
           </p>
         </GlassCard>
       </div>
@@ -67,27 +69,27 @@ export const About: React.FC<{ data: DatabaseSchema }> = ({ data }) => {
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-sans">
             {language === "te"
-              ? `${data.districtTe || data.district} నగరానికి సుమారు 18 కిలోమీటర్ల దూరంలో ఉన్న ${data.nameTe || data.name} గ్రామం జిల్లా రహదారుల ద్వారా అనుసంధానించబడి ఉంది. సులభమైన రవాణా మరియు వస్తువుల చేరవేతకు అనుకూలమైన రోడ్డు నెట్‌వర్క్ దీని స్వంతం.`
-              : `The Gram Panchayat administration boundary covers our residential wards, historical ponds, and wet agricultural fields. ${data.name} is linked directly via major district roads to ${data.district} city (some 18 kms away), making transportation and supply corridors accessible.`}
+              ? `${data.districtTe || data.district} నగరానికి సుమారు ${data.location?.distanceToDistrictHqKm || data.location?.distanceToNearestTownKm || "N/A"} కిలోమీటర్ల దూరంలో ఉన్న ${data.nameTe || data.name} గ్రామం జిల్లా రహదారుల ద్వారా అనుసంధానించబడి ఉంది. సులభమైన రవాణా మరియు వస్తువుల చేరవేతకు అనుకూలమైన రోడ్డు నెట్‌వర్క్ దీని స్వంతం.`
+              : `The Gram Panchayat administration boundary covers our residential wards, historical ponds, and wet agricultural fields. ${data.name} is linked directly via major district roads to ${data.district} city (some ${data.location?.distanceToDistrictHqKm || data.location?.distanceToNearestTownKm || "N/A"} kms away), making transportation and supply corridors accessible.`}
           </p>
           <div className="space-y-3 font-sans">
             <div className="flex items-center gap-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
               <MapPin className="w-4 h-4 text-gov-600" />
-              <span>{language === "te" ? `జిల్లా ప్రధాన కార్యాలయం: ${data.districtTe || data.district} (18 కి.మీ)` : `District Headquarter: ${data.district} (18 km)`}</span>
+              <span>{language === "te" ? `జిల్లా ప్రధాన కార్యాలయం: ${data.districtTe || data.district} (${data.location?.distanceToDistrictHqKm || data.location?.distanceToNearestTownKm || "N/A"} కి.మీ)` : `District Headquarter: ${data.district} (${data.location?.distanceToDistrictHqKm || data.location?.distanceToNearestTownKm || "N/A"} km)`}</span>
             </div>
             <div className="flex items-center gap-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
               <MapPin className="w-4 h-4 text-emerald-600" />
-              <span>{language === "te" ? `మండల ప్రజా పరిషత్ ముఖద్వారం: ${data.mandalTe || data.mandal} (6.5 కి.మీ)` : `Mandal Office: ${data.mandal} (6.5 km)`}</span>
+              <span>{language === "te" ? `మండల ప్రజా పరిషత్ ముఖద్వారం: ${data.mandalTe || data.mandal} (${data.location?.distanceToMandalHqKm || "N/A"} కి.మీ)` : `Mandal Office: ${data.mandal} (${data.location?.distanceToMandalHqKm || "N/A"} km)`}</span>
             </div>
             <div className="flex items-center gap-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
               <ShieldAlert className="w-4 h-4 text-amber-500" />
-              <span>{language === "te" ? "సచివాలయం కోడ్: 10590885 (డిజిటల్ సహాయం)" : "Panchayat Sachivalayam Code: 10590885"}</span>
+              <span>{language === "te" ? `సచివాలయం కోడ్: ${data.location?.sachivalayamCode || "N/A"} (డిజిటల్ సహాయం)` : `Panchayat Sachivalayam Code: ${data.location?.sachivalayamCode || "N/A"}`}</span>
             </div>
           </div>
         </div>
 
         {/* Real Dynamic Map */}
-        <VillageMapShadowbox />
+        <VillageMapShadowbox locationQuery={`${data.name}, ${data.mandal}, ${data.district}, Andhra Pradesh`} />
       </div>
     </div>
   );
