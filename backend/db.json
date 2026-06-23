@@ -30,16 +30,19 @@
         {
           "designation": "Sarpanch",
           "name": "Sri Kosuri Srinivas",
+          "nameTe": "శ్రీ కోసూరి శ్రీనివాస్",
           "contact": "9866217870"
         },
         {
           "designation": "Vice Sarpanch",
           "name": "Sri Achanta Trimurthulu",
+          "nameTe": "శ్రీ ఆచంట త్రిమూర్తులు",
           "contact": "9866302012"
         },
         {
           "designation": "Panchayat Secretary",
           "name": "Sri S. Veera Swamy",
+          "nameTe": "శ్రీ ఎస్. వీర స్వామి",
           "contact": "9573930799"
         }
       ],
@@ -47,61 +50,73 @@
         {
           "ward": 1,
           "name": "Mandapalli Samuel",
+          "nameTe": "మండపల్లి శామ్యూల్",
           "contact": "7671995564"
         },
         {
           "ward": 2,
           "name": "Dara Prasanthi Kumari",
+          "nameTe": "దార ప్రశాంతి కుమారి",
           "contact": "9676870395"
         },
         {
           "ward": 3,
           "name": "Narla Veera Venkata Satyanarayanamma",
+          "nameTe": "నార్ల వీర వెంకట సత్యనారాయణమ్మ",
           "contact": "6303933194"
         },
         {
           "ward": 4,
           "name": "Kosuri Satish",
+          "nameTe": "కోసూరి సతీష్",
           "contact": "9666162220"
         },
         {
           "ward": 5,
           "name": "Patnidi Suryakumari",
+          "nameTe": "పట్నిది సూర్యకుమారి",
           "contact": "9949461471"
         },
         {
           "ward": 6,
           "name": "Achanta Srinivasu",
+          "nameTe": "ఆచంట శ్రీనివాసు",
           "contact": "9866302012"
         },
         {
           "ward": 7,
           "name": "Pepakayala Suryanarayana",
+          "nameTe": "పేపకాయల సూర్యనారాయణ",
           "contact": "9849005009"
         },
         {
           "ward": 8,
           "name": "Narla Veera Venkata Satyanarayana",
+          "nameTe": "నార్ల వీర వెంకట సత్యనారాయణ",
           "contact": "8466050666"
         },
         {
           "ward": 9,
           "name": "Narla Satyavani",
+          "nameTe": "నార్ల సత్యవాణి",
           "contact": "9010021845"
         },
         {
           "ward": 10,
           "name": "Oduri Lakshmi",
+          "nameTe": "ఓదూరి లక్ష్మి",
           "contact": "9704435035"
         },
         {
           "ward": 11,
           "name": "Kosuri Srinivas",
+          "nameTe": "కోసూరి శ్రీనివాస్",
           "contact": "9866217870"
         },
         {
           "ward": 12,
           "name": "Kondepudi Kanakadurga",
+          "nameTe": "కొండేపూడి కనకదుర్గ",
           "contact": "9866733571"
         }
       ],
@@ -506,8 +521,171 @@
         "landscape_p2_te": "సమాచారం అందుబాటులో లేదు.",
         "vision_p1_te": "సమాచారం అందుబాటులో లేదు."
       },
-      "officials": [],
-      "wardMembers": [],
+      "officials": [
+        {
+          "designation": "Chairperson",
+          "name": "Smt. Gandreti Mangathayaru",
+          "nameTe": "శ్రీమతి గండ్రేటి మంగతాయారు",
+          "category": "General",
+          "contact": ""
+        },
+        {
+          "designation": "Vice Chairperson",
+          "name": "Smt. Teddapu Venkata Alekhya Rani",
+          "nameTe": "శ్రీమతి తెద్దపు వెంకట అలేఖ్య రాణి",
+          "category": "BC (Mahila)",
+          "contact": ""
+        },
+        {
+          "designation": "Vice Chairperson",
+          "name": "Sri Gandham Nageswara Rao",
+          "nameTe": "శ్రీ గంధం నాగేశ్వరరావు",
+          "category": "SC (General)",
+          "contact": ""
+        }
+      ],
+      "wardMembers": [
+        {
+          "ward": 2,
+          "name": "Smt. Lingam Sandhya",
+          "nameTe": "శ్రీమతి లింగం సంధ్య",
+          "category": "SC (Mahila)",
+          "contact": ""
+        },
+        {
+          "ward": 3,
+          "name": "Smt. Maisam Bhavani Raja",
+          "nameTe": "శ్రీమతి మైసం భవాని రాజా",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 4,
+          "name": "Sri Chendukuri Sathibabu",
+          "nameTe": "శ్రీ చెందుకుర్తి సత్తిబాబు",
+          "category": "SC (General)",
+          "contact": ""
+        },
+        {
+          "ward": 5,
+          "name": "Smt. Dammala Lakshmi Kumari",
+          "nameTe": "శ్రీమతి దమ్మాల లక్ష్మి కుమారి",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 6,
+          "name": "Smt. Gollapalli Venkata Achyutamba",
+          "nameTe": "శ్రీమతి గొల్లపల్లి వెంకట అచ్యుతాంబ",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 7,
+          "name": "Smt. Mogali Venkata Jayalakshmi",
+          "nameTe": "శ్రీమతి మొగలి వెంకట జయలక్ష్మి",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 8,
+          "name": "Sri Singam Nageswara Rao",
+          "nameTe": "శ్రీ సింగం నాగేశ్వరరావు",
+          "category": "ST (General)",
+          "contact": ""
+        },
+        {
+          "ward": 10,
+          "name": "Sri Mogali Durganandara Rao",
+          "nameTe": "శ్రీ మొగలి దుర్గానందరావు",
+          "category": "General",
+          "contact": ""
+        },
+        {
+          "ward": 11,
+          "name": "Sri Kurakula Sekhar",
+          "nameTe": "శ్రీ కూరాకుల శేఖర్",
+          "category": "General",
+          "contact": ""
+        },
+        {
+          "ward": 12,
+          "name": "Sri Gulla Subba Rao",
+          "nameTe": "శ్రీ గుళ్ళ సుబ్బారావు",
+          "category": "BC (General)",
+          "contact": ""
+        },
+        {
+          "ward": 13,
+          "name": "Smt. Vadisela Ananthalakshmi",
+          "nameTe": "శ్రీమతి వడిశెల అనంతలక్ష్మి",
+          "category": "BC (General)",
+          "contact": ""
+        },
+        {
+          "ward": 14,
+          "name": "Smt. Dasam Devi",
+          "nameTe": "శ్రీమతి దాసం దేవి",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 15,
+          "name": "Sri Ganta Apparao",
+          "nameTe": "శ్రీ గంటా అప్పలస్వామి",
+          "category": "BC (General)",
+          "contact": ""
+        },
+        {
+          "ward": 16,
+          "name": "Smt. Banisetti Jnaneshwari",
+          "nameTe": "శ్రీమతి బానిశెట్టి జ్ఞానేశ్వరి",
+          "category": "Mahila (General)",
+          "contact": ""
+        },
+        {
+          "ward": 17,
+          "name": "Sri Gandreti Srirama Chandramurti",
+          "nameTe": "శ్రీ గండ్రేటి శ్రీరామ చంద్రమూర్తి",
+          "category": "General",
+          "contact": ""
+        },
+        {
+          "ward": 19,
+          "name": "Smt. Vallabhaneni Ananthalakshmi",
+          "nameTe": "శ్రీమతి వల్లభనేని అనంతలక్ష్మి",
+          "category": "BC (General)",
+          "contact": ""
+        },
+        {
+          "ward": 20,
+          "name": "Smt. Punnam Mangalakshmi",
+          "nameTe": "శ్రీమతి పున్నం మంగళలక్ష్మి",
+          "category": "BC (Mahila)",
+          "contact": ""
+        },
+        {
+          "ward": "Co-opted",
+          "name": "Sri Mogali Jayababu",
+          "nameTe": "శ్రీ మొగలి జయబాబు",
+          "category": "General",
+          "contact": ""
+        },
+        {
+          "ward": "Co-opted",
+          "name": "Sri Eerugula Pasubabu",
+          "nameTe": "శ్రీ ఈరుగుల పసుబాబు",
+          "category": "Christian Minority",
+          "contact": ""
+        },
+        {
+          "ward": "Co-opted",
+          "name": "Smt. Shaik Shama",
+          "nameTe": "శ్రీమతి షేక్ షమా",
+          "category": "Muslim Minority (Mahila)",
+          "contact": ""
+        }
+      ],
       "voters": {
         "totalPollingStations": null,
         "maleVoters": 10500,
