@@ -124,7 +124,7 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
 interface LandBarProps {
   wet: number;
   dry: number;
-  poramboku: number;
+  publicCommon: number;
   fisheries: number;
   assigned: number;
   endowments: number;
@@ -134,7 +134,7 @@ interface LandBarProps {
 export const LandAllocationAcreBar: React.FC<LandBarProps> = ({
   wet,
   dry,
-  poramboku,
+  publicCommon,
   fisheries,
   assigned,
   endowments,
@@ -144,7 +144,7 @@ export const LandAllocationAcreBar: React.FC<LandBarProps> = ({
 
   const landRows = [
     { label: "Wet Cultivated Land", value: wet, color: "bg-emerald-500", rawColor: "#10b981", desc: "Rice paddy and sugar cane fields" },
-    { label: "Poramboku (Public Commons)", value: poramboku, color: "bg-blue-500", rawColor: "#3b82f6", desc: "Common grazing ground, village pathways" },
+    { label: "Public Commons", value: publicCommon, color: "bg-blue-500", rawColor: "#3b82f6", desc: "Common grazing ground, village pathways" },
     { label: "Endowments Land", value: endowments, color: "bg-amber-500", rawColor: "#f59e0b", desc: "Temple and local trust holdings" },
     { label: "Fisheries (Water Ponds)", value: fisheries, color: "bg-sky-400", rawColor: "#38bdf8", desc: "Freshwater aquaculture leases" },
     { label: "Assigned Lands", value: assigned, color: "bg-indigo-500", rawColor: "#6366f1", desc: "Distributed to landless SC/ST families" },

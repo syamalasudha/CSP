@@ -29,7 +29,7 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
           <LandAllocationAcreBar
             wet={land.wetLandAcres}
             dry={land.dryLandAcres}
-            poramboku={land.porambokuAcres}
+            publicCommon={land.publicCommonAcres}
             fisheries={land.fisheriesAcres}
             assigned={land.assignedAcres}
             endowments={land.endowmentsAcres}

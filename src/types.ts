@@ -44,7 +44,7 @@ export interface LandDetail {
   totalAayakattuAcres: number;
   wetLandAcres: number;
   dryLandAcres: number;
-  porambokuAcres: number;
+  publicCommonAcres: number;
   fisheriesAcres: number;
   assignedAcres: number;
   endowmentsAcres: number;
