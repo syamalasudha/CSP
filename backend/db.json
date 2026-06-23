@@ -254,7 +254,7 @@
         "totalAayakattuAcres": 1413.58,
         "wetLandAcres": 1236.38,
         "dryLandAcres": 2,
-        "porambokuAcres": 150,
+        "publicCommonAcres": 150,
         "fisheriesAcres": 15.75,
         "assignedAcres": 6,
         "endowmentsAcres": 40,
@@ -345,33 +345,33 @@
       "gallery": [
         {
           "id": "gal-1",
-          "title": "Vendra Panchayat Sachivalayam Building",
+          "title": "Historic Vendra Pond",
           "category": "Admin",
-          "imageUrl": "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?auto=format&fit=crop&q=80&w=800"
+          "imageUrl": "https://res.cloudinary.com/dfmuqbhok/image/upload/f_auto,q_auto/1782203393515_vnuana"
         },
         {
           "id": "gal-2",
           "title": "Verdant Sowing Fields of Vendra",
           "category": "Agriculture",
-          "imageUrl": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800"
+          "imageUrl": "https://res.cloudinary.com/dfmuqbhok/image/upload/f_auto,q_auto/1782202031224_eweivh"
         },
         {
           "id": "gal-3",
-          "title": "Anganwadi Centers Early Education Program",
-          "category": "Schools",
-          "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800"
+          "title": "Entrance to Vendra Village",
+          "category": "Infrastructure",
+          "imageUrl": "https://res.cloudinary.com/dfmuqbhok/image/upload/f_auto,q_auto/1782203308683_uxjlio"
         },
         {
           "id": "gal-4",
-          "title": "CC-Road and LED Street Light Installations",
+          "title": "Scenic View of Village",
           "category": "Infrastructure",
-          "imageUrl": "https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?auto=format&fit=crop&q=80&w=800"
+          "imageUrl": "https://res.cloudinary.com/dfmuqbhok/image/upload/f_auto,q_auto/1782203228396_gog1jp"
         },
         {
           "id": "gal-5",
-          "title": "Annual Gram Sabha and Community Gathering",
-          "category": "Events",
-          "imageUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800"
+          "title": "Nature",
+          "category": "Admin",
+          "imageUrl": "https://res.cloudinary.com/dmvohised/image/upload/f_auto,q_auto/vendra_p0wrff"
         }
       ],
       "messages": []
