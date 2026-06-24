@@ -148,7 +148,7 @@ export const translations = {
     email_service: "Email Service",
     office_hours: "Office hours 10 AM - 5 PM",
     office_address: "Office Address",
-    office_address_val: "Panchayat Secretariat Building, Main Road, Vendra, Pedapudi Mandal, Andhra Pradesh - 533468",
+    office_address_val: "Panchayat Secretariat Building, Main Road, Vendra, Pedapudi Mandal, Andhra Pradesh - 533344",
 
     // Staff Groups
     group_sachivalayam: "Sachivalayam Staff",
@@ -431,7 +431,7 @@ services_subtitle:
     email_service: "ఇమెయిల్ అడ్రస్",
     office_hours: "కార్యాలయ సమయం: ఉదయం 10 నుండి సాయంత్రం 5 వరకు",
     office_address: "Secretariat చిరునామా",
-    office_address_val: "పంచాయతీ సచివాలయ భవనం, మెయిన్ రోడ్, వేండ్ర గ్రామం, పెదపూడి మండలం, ఆంధ్రప్రదేశ్ - 533468",
+    office_address_val: "పంచాయతీ సచివాలయ భవనం, మెయిన్ రోడ్, వేండ్ర గ్రామం, పెదపూడి మండలం, ఆంధ్రప్రదేశ్ - 533344",
 
     // Staff Groups
     group_sachivalayam: "సచివాలయ సిబ్బంది",
