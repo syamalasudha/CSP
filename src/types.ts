@@ -13,12 +13,14 @@ export interface VillageStats {
 export interface Official {
   designation: string;
   name: string;
+  nameTe: string;
   contact?: string;
 }
 
 export interface WardMember {
   ward: number;
   name: string;
+  nameTe: string,
   contact: string;
 }
 
