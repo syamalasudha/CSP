@@ -115,7 +115,7 @@ export const Footer: React.FC<FooterProps> = ({ selectedVillage, data }) => {
                   rel="noopener noreferrer"
                   className="hover:text-white transition cursor-pointer"
                 >
-                  {language === "te" ? "YSR పెన్షన్ కానుక పోర్టల్" : "YSR Pension Kanuka Portal"}
+                  {language === "te" ? "NTR పెన్షన్ కానుక పోర్టల్" : "NTR Pension Kanuka Portal"}
                 </a>
               </li>
               <li>

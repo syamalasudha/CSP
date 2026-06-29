@@ -53,8 +53,8 @@ export const translations = {
 
     scheme_amma_vodi: "Amma Vodi",
     scheme_rythu_bharosa: "Rythu Bharosa",
-    scheme_pension_kanuka: "YSR Pension Kanuka",
-    scheme_cheyutha: "YSR Cheyutha",
+    scheme_pension_kanuka: "NTR Pension Kanuka",
+    scheme_cheyutha: "NTR Cheyutha",
     scheme_kapu_nestham: "Kapu Nestham",
 
     
@@ -73,7 +73,7 @@ export const translations = {
     badge_ration: "PUBLIC DISTRIBUTION",
     badge_shg: "WOMEN SHGs",
     badge_pesticides: "AGRICULTURAL REFORMS",
-    badge_pensions: "YSR KANUKA WELFARE",
+    badge_pensions: "NTR KANUKA WELFARE",
     badge_announcements: "PUBLIC BROADCASTS",
     badge_photos: "VILLAGE LIFE",
     badge_contact: "CONTACT US",
@@ -341,8 +341,8 @@ export const translations = {
 
     scheme_amma_vodi: "అమ్మ ఒడి",
     scheme_rythu_bharosa: "రైతు భరోసా",
-    scheme_pension_kanuka: "వైఎస్సార్ పెన్షన్ కానుక",
-    scheme_cheyutha: "వైఎస్సార్ చేయూత",
+    scheme_pension_kanuka: "ఎన్టీఆర్ పెన్షన్ కానుక",
+    scheme_cheyutha: "ఎన్టీఆర్ చేయూత",
     scheme_kapu_nestham: "కాపు నేస్తం",
 
     // Global Section Headings / Badges
@@ -355,7 +355,7 @@ export const translations = {
     badge_ration: "రేషన్ పంపిణీ",
     badge_shg: "డ్వాక్రా సంఘాలు (SHG)",
     badge_pesticides: "వ్యవసాయ సంస్కరణలు",
-    badge_pensions: "వైయస్ఆర్ పెన్షన్ కానుక",
+    badge_pensions: "ఎన్టీఆర్ పెన్షన్ కానుక",
     badge_announcements: "తాజా ప్రకటనలు",
     badge_photos: "గ్రామ చిత్రాలు",
     badge_contact: "సంప్రదింపు దారి",
@@ -393,7 +393,7 @@ export const translations = {
     agri_title: "వ్యవసాయం & భూముల పోర్ట్‌ఫోలియో",
     agri_subtitle: "మాగాణి-మెట్ట భూములు, చెరువులు, పోరంబోకు స్థలాలు, సర్వే నంబర్లు మరియు ఖాతాదారుల వివరాలు.",
     welfare_title: "సామాజిక సంక్షేమం & డ్వాక్రా పథకాలు",
-    welfare_subtitle: "వైయస్ఆర్ పెన్షన్ కానుక పరిధి మరియు మహిళా స్వయం సహాయక సంఘాల బ్యాంక్ లోన్ పొందిన వివరాల సమగ్ర పట్టిక.",
+    welfare_subtitle: "ఎన్టీఆర్ పెన్షన్ కానుక పరిధి మరియు మహిళా స్వయం సహాయక సంఘాల బ్యాంక్ లోన్ పొందిన వివరాల సమగ్ర పట్టిక.",
     voters_title: "డెమోగ్రాఫిక్స్ & ఓటర్ల సమాచారం",
     voters_subtitle: "ఓటర్ల జనాభా ప్రొఫైల్స్, లింగ నిష్పత్తి మరియు వార్డుల వారీగా పోలింగ్ స్టేషన్ కేంద్రాల వివరాలు.",
     gallery_title: "వేండ్ర ఛాయాచిత్రాలు",
