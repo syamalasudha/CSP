@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div className="text-left">
             <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-none tracking-tight font-display">
-              {villageName} {language === "te" ? "గ్రామ పంచాయతీ" : "Gram Panchayat"}
+              {t("portal_title")}
             </p>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 tracking-wider uppercase">
               {mandalName} · {t("portal_subtitle")}

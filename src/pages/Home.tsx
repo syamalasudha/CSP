@@ -43,7 +43,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
 
         <div className="relative z-10 px-6 py-16 md:py-24 max-w-4xl mx-auto text-center space-y-6">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-display uppercase tracking-widest leading-none">
-            {language === "te" ? "రాష్ట్ర డిజిటల్ గ్రామ సచివాలయ అనుసంధానం" : "Welcome to Andhra Pradesh Digital Gram Panchayat"}
+            {t("home_welcome_badge")}
           </span>
           <h1 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
             {t("portal_title")}
@@ -60,23 +60,21 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
               onClick={() => onNavigate("admin-details")}
               className="px-6 py-3 bg-gov-600 hover:bg-gov-700 text-sm font-bold rounded-xl transition shadow-lg shadow-gov-600/15 flex items-center gap-2 cursor-pointer"
             >
-              {language === "te" ? "పాలనా బోర్డు" : "Panchayat Board"}
+              {t("admin_board")}
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
   onClick={() => onNavigate("citizen-services")}
   className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-sm font-bold rounded-xl transition shadow-lg flex items-center gap-2"
 >
-  {language === "te"
-    ? "పౌర సేవలు"
-    : "Citizen Services"}
+  {t("nav_services")}
   <ArrowRight className="w-4 h-4" />
 </button>
             <button
               onClick={() => onNavigate("contact")}
               className="px-6 py-3 bg-slate-800 hover:bg-slate-700 hover:text-white text-sm font-bold rounded-xl border border-slate-700 transition cursor-pointer"
             >
-              {language === "te" ? "సమస్యల అర్జీలు" : "Lodge Complaint"}
+              {t("lodge_complaint")}
             </button>
           </div>
         </div>

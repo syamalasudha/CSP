@@ -15,6 +15,7 @@ export interface VillageInfo {
   mandalTe: string;
   district: string;
   districtTe: string;
+  type?: string;
   population: string;
   wards: string;
   color: string;
@@ -57,6 +58,7 @@ export const VillageSelector: React.FC<VillageSelectorProps> = ({ onSelect }) =>
         mandalTe: r.mandalTe || "",
         district: r.district || "",
         districtTe: r.districtTe || "",
+        type: r.type || "Panchayat",
         population: r.stats && r.stats.population ? String(r.stats.population) : "—",
         wards: r.stats && r.stats.totalWards ? String(r.stats.totalWards) : "—",
         color: DEFAULT_COLORS[idx % DEFAULT_COLORS.length],

@@ -80,6 +80,9 @@ export const translations = {
     badge_admin_dashboard: "ADMIN CONSOLE",
 
     // Home Page Translations
+    home_welcome_badge: "Welcome to Andhra Pradesh Digital Gram Panchayat",
+    admin_board: "Panchayat Board",
+    lodge_complaint: "Lodge Complaint",
     home_welcome_title: "Welcome to Vendra Digital Secretariat",
     home_welcome_desc: "Connecting citizens directly to public welfare schemes, digital administration, and transparent local governance systems in Pedapudi Mandal.",
     home_infrastructure_title: "Utilities & Public Infrastructure",
@@ -362,6 +365,9 @@ export const translations = {
     badge_admin_dashboard: "అడ్మిన్ కన్సోల్",
 
     // Home Page Translations
+    home_welcome_badge: "రాష్ట్ర డిజిటల్ గ్రామ సచివాలయ అనుసంధానం",
+    admin_board: "పాలనా బోర్డు",
+    lodge_complaint: "సమస్యల అర్జీలు",
     home_welcome_title: "వేండ్ర డిజిటల్ సచివాలయానికి స్వాగతం",
     home_welcome_desc: "పెదపూడి మండలంలోని పౌరులను ప్రభుత్వ సంక్షేమ పథకాలు, డిజిటల్ పరిపాలన మరియు పారదర్శక స్థానిక పాలనా వ్యవస్థలతో నేరుగా అనుసంధానించడం.",
     home_infrastructure_title: "ప్రజా సౌకర్యాలు & మౌలిక సదుపాయాలు",

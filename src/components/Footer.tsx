@@ -51,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({ selectedVillage, data }) => {
                 <Landmark className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-display font-bold text-white tracking-tight">
-                {villageName} {language === "te" ? "గ్రామ పంచాయతీ" : "Gram Panchayat"}
+                {t("portal_title")}
               </h3>
             </div>
             <p className="text-xs text-slate-400 font-sans leading-relaxed">
@@ -168,8 +168,7 @@ export const Footer: React.FC<FooterProps> = ({ selectedVillage, data }) => {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-500 font-sans">
           <p>
-            © {currentYear} {villageName}{" "}
-            {language === "te" ? "గ్రామ పంచాయతీ." : "Gram Panchayat."}{" "}
+            © {currentYear} {t("portal_title")}.{" "}
             {language === "te" ? "సర్వ హక్కులూ ప్రత్యేకించబడినవి." : "All Rights Reserved."}
           </p>
           <div className="flex gap-6">

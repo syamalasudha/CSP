@@ -53,7 +53,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                val = val.replace(/Kakinada/gi, language === 'te' && village.districtTe ? village.districtTe : village.district);
                val = val.replace(/కాకినాడ/g, village.districtTe || village.district);
             }
-            if (village.type === "Municipality") {
+            if (village.type === "Municipality" || village.id === "gollaprolu" || village.name === "Gollaprolu") {
                val = val.replace(/Gram Panchayat/gi, language === 'te' ? 'మున్సిపాలిటీ' : 'Municipality');
                val = val.replace(/Panchayat/gi, language === 'te' ? 'మున్సిపాలిటీ' : 'Municipality');
                val = val.replace(/గ్రామ పంచాయతీ/g, 'మున్సిపాలిటీ');
