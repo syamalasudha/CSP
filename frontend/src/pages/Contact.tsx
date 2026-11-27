@@ -3,29 +3,49 @@
  * SPDX-License-Identifier: Apache-2.5
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "../components/LanguageContext";
 import { SectionHeading, GlassCard } from "../components/UIComponents";
 import { Phone, Mail, MapPin, Send, HelpCircle, Check, Loader2 } from "lucide-react";
 
 interface ContactProps {
   data: DatabaseSchema;
+  citizenToken?: string | null;
+  citizenUser?: PortalUser | null;
   onSuccess: (msg: string) => void;
   onError: (msg: string) => void;
   onNavigateHome: () => void;
 }
 
-import { API_BASE, apiUrl } from "../config/api";
-import { DatabaseSchema } from "../types";
+import { apiUrl } from "../config/api";
+import { DatabaseSchema, PortalUser } from "../types";
 
-export const Contact: React.FC<ContactProps> = ({ data, onSuccess, onError, onNavigateHome }) => {
+export const Contact: React.FC<ContactProps> = ({
+  data,
+  citizenToken,
+  citizenUser,
+  onSuccess,
+  onError,
+  onNavigateHome,
+}) => {
   const { language, t } = useLanguage();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    name: citizenUser?.fullName || "",
+    email: citizenUser?.email || "",
+    phone: citizenUser?.phone || "",
     message: "",
   });
+
+  useEffect(() => {
+    if (citizenUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || citizenUser.fullName || "",
+        email: prev.email || citizenUser.email || "",
+        phone: prev.phone || citizenUser.phone || "",
+      }));
+    }
+  }, [citizenUser]);
 
   let phone = "N/A";
   let email = `${data.id}.panchayat@ap.gov.in`;
@@ -57,10 +77,14 @@ export const Contact: React.FC<ContactProps> = ({ data, onSuccess, onError, onNa
 
     setLoading(true);
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (citizenToken) {
+        headers.Authorization = `Bearer ${citizenToken}`;
+      }
       const response = await fetch(apiUrl("/api/messages"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers,
+        body: JSON.stringify({ ...formData, villageId: data.id }),
       });
 
       if (!response.ok) {

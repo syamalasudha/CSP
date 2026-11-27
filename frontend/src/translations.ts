@@ -139,6 +139,8 @@ export const translations = {
     // Officials Titles
     sarpanch: "Sarpanch",
     vice_sarpanch: "Vice Sarpanch",
+    chairperson: "Chairperson",
+    vice_chairperson: "Vice Chairperson",
     panchayat_secretary: "Panchayat Secretary",
     role_sarpanch: "Sri Kosuri Srinivas",
     role_vice_sarpanch: "Sri Achanta Trimurthulu",
@@ -425,6 +427,8 @@ services_subtitle:
     // Officials Titles
     sarpanch: "సర్పంచ్",
     vice_sarpanch: "ఉప సర్పంచ్",
+    chairperson: "చైర్‌పర్సన్",
+    vice_chairperson: "వైస్ చైర్‌పర్సన్",
     panchayat_secretary: "పంచాయతీ కార్యదర్శి",
     role_sarpanch: "శ్రీ కోసూరి శ్రీనివాస్",
     role_vice_sarpanch: "శ్రీ ఆచంట త్రిమూర్తులు",

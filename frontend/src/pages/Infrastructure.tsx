@@ -14,6 +14,12 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
   const { language, t } = useLanguage();
   const { land, water, infrastructure, education, sanitation, roads, facilities } = data;
 
+  const getHospitalCount = (entry: number | { total?: number | null } | null | undefined) => {
+    if (entry == null) return "N/A";
+    if (typeof entry === "number") return entry;
+    return entry.total ?? "N/A";
+  };
+
   return (
     <div className="space-y-12">
       <SectionHeading
@@ -80,7 +86,7 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
           <div className="text-sm text-slate-700 dark:text-slate-300 space-y-3">
             {data.socialCategories && (
               <p>
-                <strong>{language === "te" ? "సామాజిక వర్గాల జనसंఖ్యా:" : "Social categories:"}</strong>
+                <strong>{language === "te" ? "సామాజిక వర్గాల జనాభా:" : "Social categories:"}</strong>
                 {` SC: ${data.socialCategories.scPopulation ?? "N/A"}, ST: ${data.socialCategories.stPopulation ?? "N/A"}`}
               </p>
             )}
@@ -88,7 +94,7 @@ export const Infrastructure: React.FC<{ data: DatabaseSchema }> = ({ data }) => 
             {data.hospitals && (
               <p>
                 <strong>{language === "te" ? "ఆసుపత్రులు:" : "Hospitals:"}</strong>
-                {` ${data.hospitals.total?.total ?? data.hospitals.total ?? "N/A"} total (Gov: ${data.hospitals.government?.total ?? data.hospitals.government ?? "N/A"}, Private: ${data.hospitals.private?.total ?? data.hospitals.private ?? "N/A"})`}
+                {` ${getHospitalCount(data.hospitals.total)} total (Gov: ${getHospitalCount(data.hospitals.government)}, Private: ${getHospitalCount(data.hospitals.private)})`}
               </p>
             )}
 

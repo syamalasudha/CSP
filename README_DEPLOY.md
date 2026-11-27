@@ -1,17 +1,22 @@
 Render + Vercel deployment notes
 
 Overview
-- This repo contains a frontend (Vite/React) in the repo root and a backend Express server in `backend/`.
-- Deploy the backend to Render (Node service) and the frontend to Vercel (static site). The backend uses `backend/db.json` for persistent data — attach a Render Disk.
+- This repo contains a MERN stack app: a React/Vite frontend in the repo root and an Express + MongoDB (Mongoose) backend in `backend/`.
+- Deploy the backend to Render (Node service) connected to MongoDB Atlas, and deploy the frontend to Vercel (static site).
 
 Backend (Render)
-1. In Render: create a Web Service
+1. Provision a MongoDB Atlas cluster and copy its connection URI.
+2. In Render: create a Web Service
    - Root Directory: `backend`
    - Environment: Node
    - Build Command: `npm install && npm run build`
    - Start Command: `npm run start`
-   - Env vars: `NODE_ENV=production`, add `JWT_SECRET` if desired
-   - Add a Disk and mount path: `/opt/render/project/src/backend` (so `backend/db.json` persists)
+   - Env vars:
+     - `NODE_ENV=production`
+     - `MONGODB_URI=<your-mongodb-atlas-uri>`
+     - `JWT_SECRET=<strong-random-secret>`
+     - `CORS_ORIGIN=https://<your-vercel-app>.vercel.app`
+   - On first boot, the server automatically seeds the `villages` collection from `backend/db.json` if empty (you can also run `npm run seed`).
 2. Locally (test):
 ```bash
 cd backend

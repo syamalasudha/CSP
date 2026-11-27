@@ -14,13 +14,15 @@ export interface Official {
   designation: string;
   name: string;
   nameTe: string;
+  category?: string;
   contact?: string;
 }
 
 export interface WardMember {
-  ward: number;
+  ward: number | string;
   name: string;
-  nameTe: string,
+  nameTe: string;
+  category?: string;
   contact: string;
 }
 
@@ -342,12 +344,67 @@ export interface GalleryItem {
 
 export interface ContactMessage {
   id: string;
+  villageId?: string;
+  citizenUsername?: string;
   name: string;
   email: string;
   phone: string;
   message: string;
   status: 'unread' | 'read' | 'resolved';
+  adminRemarks?: string;
   date: string;
+}
+
+export interface CertificateItem {
+  id: string;
+  villageId: string;
+  name: string;
+  nameTe?: string;
+  description: string;
+  descriptionTe?: string;
+  category: 'identity' | 'welfare' | 'records' | 'revenue';
+  documents: string[];
+  steps: string[];
+  processingTime?: string;
+  fee?: string;
+  officeLocation?: string;
+  downloadUrl: string | null;
+}
+
+export interface SchemeItem {
+  id: string;
+  villageId: string;
+  name: string;
+  nameTe?: string;
+  category: string;
+  benefits?: string;
+  benefitsTe?: string;
+  eligibility: string;
+  eligibilityTe?: string;
+  documents: string[];
+  steps: string[];
+  officialUrl?: string | null;
+}
+
+export interface PortalUser {
+  username: string;
+  role: 'admin' | 'citizen';
+  fullName: string;
+  phone: string;
+  email: string;
+  villageId: string;
+  ward: string;
+  savedCertificates: string[];
+  savedSchemes: string[];
+}
+
+export interface CommunicationDetail {
+  website?: string | null;
+  email?: string[];
+  phone?: string;
+  fax?: string;
+  wirelessCommunicationAvailable?: boolean;
+  cctvAvailable?: boolean;
 }
 
 export interface DatabaseSchema {
@@ -389,6 +446,7 @@ export interface DatabaseSchema {
   revenue?: RevenueDetail;
   roads?: RoadsDetail;
   facilities?: FacilitiesDetail;
+  communication?: CommunicationDetail;
   announcements: Announcement[];
   gallery: GalleryItem[];
   messages: ContactMessage[];

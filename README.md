@@ -1,4 +1,4 @@
-﻿# Digital Panchayat Service Portal (CSP Village Portal)
+# Digital Panchayat Service Portal (CSP Village Portal)
 
 ## Problem Statement
 
@@ -8,10 +8,10 @@ The Digital Panchayat Service Portal aims to provide a centralized, user-friendl
 
 ## Project Overview
 
-This repository implements a full-stack web application with:
+This repository implements a full-stack **MERN** web application with:
 - `src/` — the React + TypeScript frontend
-- `backend/` — the Express TypeScript backend
-- `db.json` — local JSON data store used by the backend
+- `backend/` — the Express + Mongoose + TypeScript backend
+- `MongoDB` — primary database storing villages, staff, announcements, gallery items, and citizen grievances (`backend/db.json` is used only as initial seed data)
 
 The app is multilingual (English/Telugu) and supports village selection, portal navigation, admin authentication, and content updates.
 
@@ -35,13 +35,14 @@ The app is multilingual (English/Telugu) and supports village selection, portal 
 **Backend**
 - Node.js
 - Express
+- MongoDB & Mongoose
 - TypeScript
 - JWT-based authentication for admin routes
 - CORS and dotenv for environment-based configuration
 
-**Data**
-- `db.json` acts as the local data store for villages, staff, announcements, gallery content, and portal data
-- Backend read/write operations are handled through Express API endpoints
+**Database**
+- MongoDB collections: `villages` (village stats, officials, wards, staff, announcements, gallery) and `messages` (citizen grievances)
+- `backend/seed.ts` automatically seeds MongoDB from `backend/db.json` on first startup if `villages` is empty (or manually via `npm run seed`)
 
 ## Features
 
@@ -110,12 +111,18 @@ The app is multilingual (English/Telugu) and supports village selection, portal 
 
 ## Backend Configuration
 
-The backend reads and writes `db.json` relative to the working directory. When started from `backend/`, it uses `backend/db.json`.
-
-Supported environment variables:
+Copy `backend/.env.example` to `backend/.env` and configure:
 - `PORT` — backend port (default `3000`)
+- `MONGODB_URI` — MongoDB connection string (local `mongodb://127.0.0.1:27017/digital_panchayat` or MongoDB Atlas URI)
 - `JWT_SECRET` — secret used to sign JWT tokens
 - `CORS_ORIGIN` — comma-separated list of allowed origins for CORS
+
+**Backend (`backend/`) scripts**
+- `npm run dev` — run the Express + MongoDB server with `tsx`
+- `npm run seed` — manually seed/upsert initial villages from `backend/db.json` into MongoDB
+- `npm run build` — bundle the backend server to `dist/server.cjs`
+- `npm run start` — start the bundled backend server
+- `npm run lint` — run TypeScript type checking for backend code
 
 ## Admin Access
 

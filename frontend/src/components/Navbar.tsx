@@ -8,7 +8,7 @@ import { useTheme } from "./ThemeContext";
 import { useLanguage } from "./LanguageContext";
 import {
   Sun, Moon, Menu, X, Landmark, ShieldAlert, Award,
-  Languages, ArrowLeftRight, ChevronDown
+  Languages, ArrowLeftRight, UserCheck
 } from "lucide-react";
 import { VillageInfo } from "./VillageSelector";
 
@@ -16,7 +16,10 @@ interface NavbarProps {
   activePage: string;
   setActivePage: (page: string) => void;
   isAdminLoggedIn: boolean;
+  isCitizenLoggedIn: boolean;
+  citizenName?: string;
   onLogout: () => void;
+  onCitizenLogout: () => void;
   selectedVillage: VillageInfo;
   onSwitchVillage: () => void;
 }
@@ -25,7 +28,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   activePage,
   setActivePage,
   isAdminLoggedIn,
+  isCitizenLoggedIn,
+  citizenName,
   onLogout,
+  onCitizenLogout,
   selectedVillage,
   onSwitchVillage,
 }) => {
@@ -175,6 +181,33 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
+          {/* Citizen Login / Hub button */}
+          {isCitizenLoggedIn ? (
+            <button
+              onClick={() => handleNavClick("citizen-portal")}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all ${
+                activePage === "citizen-portal"
+                  ? "bg-emerald-100 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800"
+                  : "bg-slate-100 dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              {citizenName ? citizenName.split(" ")[0] : (language === "te" ? "పౌర హబ్" : "Citizen Hub")}
+            </button>
+          ) : (
+            <button
+              onClick={() => handleNavClick("citizen-portal")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold border flex items-center gap-1.5 cursor-pointer transition ${
+                activePage === "citizen-portal"
+                  ? "bg-emerald-600 text-white border-transparent"
+                  : "border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              {language === "te" ? "పౌర లాగిన్" : "Citizen Login"}
+            </button>
+          )}
+
           {/* Admin button */}
           {isAdminLoggedIn ? (
             <button
@@ -278,6 +311,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               <ArrowLeftRight className="w-4 h-4" />
               {language === "te" ? "గ్రామం మార్చు" : "Switch Village"}
             </button>
+
+            {isCitizenLoggedIn ? (
+              <div className="flex flex-col gap-2 pt-1">
+                <button
+                  onClick={() => handleNavClick("citizen-portal")}
+                  className="w-full text-center py-2.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300 rounded-xl font-bold border border-emerald-200/70 text-sm cursor-pointer"
+                >
+                  {language === "te" ? "నా పౌర హబ్" : "My Citizen Hub"}
+                </button>
+                <button
+                  onClick={() => { onCitizenLogout(); setIsOpen(false); }}
+                  className="w-full text-center py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-xs cursor-pointer"
+                >
+                  {language === "te" ? "పౌర లాగ్ అవుట్" : "Citizen Logout"}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleNavClick("citizen-portal")}
+                className="w-full text-center py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-sm cursor-pointer"
+              >
+                {language === "te" ? "పౌర లాగిన్ / నమోదు" : "Citizen Login / Register"}
+              </button>
+            )}
 
             {isAdminLoggedIn ? (
               <div className="flex flex-col gap-2 pt-1">

@@ -26,9 +26,11 @@ import {
   AlertTriangle,
   LockKeyhole,
   Eye,
-  EyeOff
+  EyeOff,
+  FileText,
+  BookOpen
 } from "lucide-react";
-import { DatabaseSchema, StaffMember, Announcement, GalleryItem, ContactMessage } from "../types";
+import { DatabaseSchema, StaffMember, Announcement, GalleryItem, ContactMessage, CertificateItem, SchemeItem } from "../types";
 import { API_BASE, apiUrl } from "../config/api";
 
 interface AdminProps {
@@ -58,43 +60,110 @@ export const Admin: React.FC<AdminProps> = ({
   const [loginLoading, setLoginLoading] = useState(false);
 
   // Dashboard Tab state
-  const [activeTab, setActiveTab] = useState<"analytics" | "stats" | "staff" | "announcements" | "gallery" | "complaints">("analytics");
+  const [activeTab, setActiveTab] = useState<
+    "analytics" | "stats" | "staff" | "announcements" | "certificates" | "schemes" | "gallery" | "complaints"
+  >("analytics");
 
   // Loading indicator for API mutations
   const [actionLoading, setActionLoading] = useState(false);
 
   // --- COMPLAINTS STATE ---
   const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [remarksDrafts, setRemarksDrafts] = useState<Record<string, string>>({});
+
+  // --- CERTIFICATES & SCHEMES STATE ---
+  const [certificates, setCertificates] = useState<CertificateItem[]>([]);
+  const [schemes, setSchemes] = useState<SchemeItem[]>([]);
+  const [editingCertId, setEditingCertId] = useState<string | null>(null);
+  const [editingSchemeId, setEditingSchemeId] = useState<string | null>(null);
+  const [editingAnnId, setEditingAnnId] = useState<string | null>(null);
 
   // Forms state
   const [newAnn, setNewAnn] = useState({ title: "", content: "", category: "General" });
   const [newStaff, setNewStaff] = useState({ name: "", designation: "", contact: "", department: "Sachivalayam" });
   const [newGal, setNewGal] = useState({ title: "", category: "Infrastructure", imageUrl: "" });
+  const [certForm, setCertForm] = useState({
+    name: "",
+    nameTe: "",
+    category: "identity",
+    description: "",
+    descriptionTe: "",
+    documents: "",
+    steps: "",
+    processingTime: "7 - 15 Working Days",
+    fee: "₹45 (MeeSeva / Sachivalayam)",
+    officeLocation: "Village Secretariat / MeeSeva",
+    downloadUrl: "",
+    villageId: "all",
+  });
+  const [schemeForm, setSchemeForm] = useState({
+    name: "",
+    nameTe: "",
+    category: "Welfare",
+    benefits: "",
+    benefitsTe: "",
+    eligibility: "",
+    eligibilityTe: "",
+    documents: "",
+    steps: "",
+    officialUrl: "",
+    villageId: "all",
+  });
 
   // Dynamics Stats editing state
   const [editedStats, setEditedStats] = useState({
-    population: data.stats.population,
-    totalHouseholds: data.stats.totalHouseholds,
-    areaSqKm: data.stats.areaSqKm,
-    totalWards: data.stats.totalWards,
-    ledStreetLights: data.infrastructure.ledStreetLights,
-    groupsWithBankLoans: data.shg.groupsWithBankLoans,
+    population: data.stats?.population ?? 0,
+    totalHouseholds: data.stats?.totalHouseholds ?? 0,
+    areaSqKm: data.stats?.areaSqKm ?? 0,
+    totalWards: data.stats?.totalWards ?? 0,
+    ledStreetLights: data.infrastructure?.ledStreetLights ?? 0,
+    groupsWithBankLoans: data.shg?.groupsWithBankLoans ?? 0,
   });
+
+  useEffect(() => {
+    setEditedStats({
+      population: data.stats?.population ?? 0,
+      totalHouseholds: data.stats?.totalHouseholds ?? 0,
+      areaSqKm: data.stats?.areaSqKm ?? 0,
+      totalWards: data.stats?.totalWards ?? 0,
+      ledStreetLights: data.infrastructure?.ledStreetLights ?? 0,
+      groupsWithBankLoans: data.shg?.groupsWithBankLoans ?? 0,
+    });
+  }, [data]);
 
   useEffect(() => {
     if (token) {
       fetchComplaints();
+      fetchServices();
     }
-  }, [token]);
+  }, [token, data.id]);
+
+  const fetchServices = async () => {
+    try {
+      const res = await fetch(apiUrl(`/api/services?villageId=${encodeURIComponent(data.id)}`));
+      if (res.ok) {
+        const json = await res.json();
+        setCertificates(json.certificates || []);
+        setSchemes(json.schemes || []);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchComplaints = async () => {
     try {
-      const res = await fetch(apiUrl(`/api/messages`), {
+      const res = await fetch(apiUrl(`/api/messages?villageId=${encodeURIComponent(data.id)}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        const d = await res.json();
+        const d: ContactMessage[] = await res.json();
         setMessages(d);
+        const initialDrafts: Record<string, string> = {};
+        d.forEach((m) => {
+          initialDrafts[m.id] = m.adminRemarks || "";
+        });
+        setRemarksDrafts(initialDrafts);
       }
     } catch (e) {
       console.error(e);
@@ -114,14 +183,14 @@ export const Admin: React.FC<AdminProps> = ({
       const res = await fetch(apiUrl(`/api/auth/login`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, expectedRole: "admin" }),
       });
 
+      const block = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(language === "te" ? "వినియోగదారు పేరు లేదా పాస్‌వర్డ్ సరైనది కాదు" : "Invalid username or password");
+        throw new Error(block.error || (language === "te" ? "వినియోగదారు పేరు లేదా పాస్‌వర్డ్ సరైనది కాదు" : "Invalid username or password"));
       }
 
-      const block = await res.json();
       onLoginSuccess(block.token);
       onToastSuccess(language === "te" ? "ధృవీకరణ పూర్తయింది. సుస్వాగతం." : "Access Authorized. Welcome back, Admin.");
     } catch (err) {
@@ -138,13 +207,14 @@ export const Admin: React.FC<AdminProps> = ({
     setActionLoading(true);
     try {
       // 1. Update stats
-      await fetch(apiUrl(`/api/data/sections`), {
+      const statsRes = await fetch(apiUrl(`/api/data/sections`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          villageId: data.id,
           key: "stats",
           payload: {
             population: Number(editedStats.population),
@@ -154,24 +224,34 @@ export const Admin: React.FC<AdminProps> = ({
           },
         }),
       });
+      if (!statsRes.ok) {
+        const err = await statsRes.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update census stats");
+      }
 
       // 2. Update Lights
-      await fetch(apiUrl(`/api/data/sections`), {
+      const infraRes = await fetch(apiUrl(`/api/data/sections`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          villageId: data.id,
           key: "infrastructure",
           payload: { ledStreetLights: Number(editedStats.ledStreetLights) },
         }),
       });
+      if (!infraRes.ok) {
+        const err = await infraRes.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update infrastructure stats");
+      }
 
       onRefreshData();
       onToastSuccess(language === "te" ? "గ్రామ జనాభా గణాంకాలు పబ్లిక్ పోర్టల్‌లో నవీకరించబడ్డాయి!" : "Village core census statistics successfully updated on public portal!");
-    } catch (e) {
-      onToastError(language === "te" ? "సమాచారాన్ని నవీకరించలేకపోయాము." : "Could not update figures.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      onToastError(msg || (language === "te" ? "సమాచారాన్ని నవీకరించలేకపోయాము." : "Could not update figures."));
     } finally {
       setActionLoading(false);
     }
@@ -193,7 +273,7 @@ export const Admin: React.FC<AdminProps> = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newStaff),
+        body: JSON.stringify({ ...newStaff, villageId: data.id }),
       });
 
       if (!res.ok) throw new Error("Add staff failed");
@@ -212,20 +292,19 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteStaff = async (id: string, name: string) => {
     if (!confirm(language === "te" ? `మీరు నిజంగా ఉద్యోగి '${name}' వివరాలను తొలగించాలనుకుంటున్నారా?` : `Are you sure you want to remove staff ${name}?`)) return;
     try {
-      const res = await fetch(apiUrl(`/api/staff/${id}`), {
+      const res = await fetch(apiUrl(`/api/staff/${id}?villageId=${encodeURIComponent(data.id)}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        onToastSuccess(language === "te" ? `ఉద్యోగి '${name}' వివరాలు తొలగించబడ్డాయి.` : `Staff member ${name} removed.`);
-        onRefreshData();
-      }
+      if (!res.ok) throw new Error("Delete staff failed");
+      onToastSuccess(language === "te" ? `ఉద్యోగి '${name}' వివరాలు తొలగించబడ్డాయి.` : `Staff member ${name} removed.`);
+      onRefreshData();
     } catch (err) {
       onToastError("Error deleting staff member.");
     }
   };
 
-  // CRUD: ANNOUNCEMENT Add
+  // CRUD: ANNOUNCEMENT Add / Edit
   const handleAddAnnouncementSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newAnn.title || !newAnn.content) {
@@ -235,18 +314,25 @@ export const Admin: React.FC<AdminProps> = ({
 
     setActionLoading(true);
     try {
-      const res = await fetch(apiUrl(`/api/announcements`), {
-        method: "POST",
+      const url = editingAnnId ? apiUrl(`/api/announcements/${editingAnnId}`) : apiUrl(`/api/announcements`);
+      const method = editingAnnId ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newAnn),
+        body: JSON.stringify({ ...newAnn, villageId: data.id }),
       });
 
-      if (!res.ok) throw new Error("Add Announcement failed");
-      onToastSuccess(language === "te" ? "ప్రకటన విజయవంతంగా వార్తా విభాగంలో ప్రచురించబడింది!" : `Announcement successfully pinned into public news desk!`);
+      if (!res.ok) throw new Error(editingAnnId ? "Update Announcement failed" : "Add Announcement failed");
+      onToastSuccess(
+        editingAnnId
+          ? (language === "te" ? "ప్రకటన విజయవంతంగా నవీకరించబడింది!" : "Announcement updated successfully!")
+          : (language === "te" ? "ప్రకటన విజయవంతంగా వార్తా విభాగంలో ప్రచురించబడింది!" : "Announcement successfully pinned into public news desk!")
+      );
       setNewAnn({ title: "", content: "", category: "General" });
+      setEditingAnnId(null);
       onRefreshData();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Error publishing announcement.";
@@ -256,18 +342,144 @@ export const Admin: React.FC<AdminProps> = ({
     }
   };
 
+  // CRUD: CERTIFICATES / DOCUMENTS
+  const resetCertForm = () => {
+    setEditingCertId(null);
+    setCertForm({
+      name: "",
+      nameTe: "",
+      category: "identity",
+      description: "",
+      descriptionTe: "",
+      documents: "",
+      steps: "",
+      processingTime: "7 - 15 Working Days",
+      fee: "₹45 (MeeSeva / Sachivalayam)",
+      officeLocation: "Village Secretariat / MeeSeva",
+      downloadUrl: "",
+      villageId: "all",
+    });
+  };
+
+  const handleSaveCertificate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!certForm.name || !certForm.description) {
+      onToastError("Certificate name and description are required.");
+      return;
+    }
+    setActionLoading(true);
+    try {
+      const url = editingCertId
+        ? apiUrl(`/api/services/certificates/${editingCertId}`)
+        : apiUrl(`/api/services/certificates`);
+      const res = await fetch(url, {
+        method: editingCertId ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(certForm),
+      });
+      if (!res.ok) throw new Error("Failed saving certificate guide");
+      onToastSuccess(editingCertId ? "Certificate guide updated!" : "Certificate guide added to portal!");
+      resetCertForm();
+      fetchServices();
+    } catch (err) {
+      onToastError(err instanceof Error ? err.message : "Error saving certificate");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteCertificate = async (id: string, name: string) => {
+    if (!confirm(`Delete certificate guide "${name}"?`)) return;
+    try {
+      const res = await fetch(apiUrl(`/api/services/certificates/${id}`), {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed deleting certificate");
+      onToastSuccess("Certificate guide deleted.");
+      fetchServices();
+    } catch {
+      onToastError("Delete failed.");
+    }
+  };
+
+  // CRUD: GOVERNMENT SCHEMES
+  const resetSchemeForm = () => {
+    setEditingSchemeId(null);
+    setSchemeForm({
+      name: "",
+      nameTe: "",
+      category: "Welfare",
+      benefits: "",
+      benefitsTe: "",
+      eligibility: "",
+      eligibilityTe: "",
+      documents: "",
+      steps: "",
+      officialUrl: "",
+      villageId: "all",
+    });
+  };
+
+  const handleSaveScheme = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!schemeForm.name || !schemeForm.eligibility) {
+      onToastError("Scheme name and eligibility are required.");
+      return;
+    }
+    setActionLoading(true);
+    try {
+      const url = editingSchemeId
+        ? apiUrl(`/api/services/schemes/${editingSchemeId}`)
+        : apiUrl(`/api/services/schemes`);
+      const res = await fetch(url, {
+        method: editingSchemeId ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(schemeForm),
+      });
+      if (!res.ok) throw new Error("Failed saving government scheme");
+      onToastSuccess(editingSchemeId ? "Government scheme updated!" : "Government scheme added to portal!");
+      resetSchemeForm();
+      fetchServices();
+    } catch (err) {
+      onToastError(err instanceof Error ? err.message : "Error saving scheme");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteScheme = async (id: string, name: string) => {
+    if (!confirm(`Delete scheme "${name}"?`)) return;
+    try {
+      const res = await fetch(apiUrl(`/api/services/schemes/${id}`), {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed deleting scheme");
+      onToastSuccess("Government scheme deleted.");
+      fetchServices();
+    } catch {
+      onToastError("Delete failed.");
+    }
+  };
+
   // CRUD: ANNOUNCEMENT delete
   const handleDeleteAnn = async (id: string) => {
     if (!confirm(language === "te" ? "మీరు నిజంగా ఈ ప్రకటనను తొలగించాలనుకుంటున్నారా?" : "Are you sure you want to delete this announcement?")) return;
     try {
-      const res = await fetch(apiUrl(`/api/announcements/${id}`), {
+      const res = await fetch(apiUrl(`/api/announcements/${id}?villageId=${encodeURIComponent(data.id)}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        onToastSuccess(language === "te" ? "ప్రకటన విజయవంతంగా తొలగించబడింది." : "Announcement deleted from news feeds.");
-        onRefreshData();
-      }
+      if (!res.ok) throw new Error("Failed to delete");
+      onToastSuccess(language === "te" ? "ప్రకటన విజయవంతంగా తొలగించబడింది." : "Announcement deleted from news feeds.");
+      onRefreshData();
     } catch (err) {
       onToastError("Failed to delete.");
     }
@@ -289,7 +501,7 @@ export const Admin: React.FC<AdminProps> = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newGal),
+        body: JSON.stringify({ ...newGal, villageId: data.id }),
       });
 
       if (!res.ok) throw new Error("Could not add photo");
@@ -308,20 +520,19 @@ export const Admin: React.FC<AdminProps> = ({
   const handleDeleteGal = async (id: string) => {
     if (!confirm(language === "te" ? "ఈ ఫోటోను తొలగించాలనుకుంటున్నారా?" : "Do you want to delete this photo?")) return;
     try {
-      const res = await fetch(apiUrl(`/api/gallery/${id}`), {
+      const res = await fetch(apiUrl(`/api/gallery/${id}?villageId=${encodeURIComponent(data.id)}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        onToastSuccess("Photo deleted.");
-        onRefreshData();
-      }
+      if (!res.ok) throw new Error("Delete failed");
+      onToastSuccess("Photo deleted.");
+      onRefreshData();
     } catch (err) {
       onToastError("Delete failed");
     }
   };
 
-  // CRUD: COMPLAINT resolve
+  // CRUD: COMPLAINT resolve / reply
   const handleUpdateComplaintStatus = async (id: string, status: "read" | "resolved") => {
     try {
       const res = await fetch(apiUrl(`/api/messages/${id}`), {
@@ -330,12 +541,11 @@ export const Admin: React.FC<AdminProps> = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status, adminRemarks: remarksDrafts[id] ?? "" }),
       });
-      if (res.ok) {
-        onToastSuccess(language === "te" ? `ఫిర్యాదు స్థితి [${status}] కి మార్చబడింది.` : `Grievance status updated to [${status}] successfully.`);
-        fetchComplaints();
-      }
+      if (!res.ok) throw new Error("Update failed");
+      onToastSuccess(language === "te" ? `ఫిర్యాదు స్థితి [${status}] కి మార్చబడింది.` : `Grievance updated to [${status}] with remarks.`);
+      fetchComplaints();
     } catch (err) {
       onToastError("Failed to update ticket.");
     }
@@ -424,10 +634,22 @@ export const Admin: React.FC<AdminProps> = ({
             </button>
           </form>
 
-          {/* Quick instructions for review mock */}
-          <div className="mt-6 pt-4 border-t border-slate-200/50 dark:border-slate-800 text-[10px] text-slate-400 font-sans leading-relaxed text-center">
-            {language === "te" ? "* డెవలపర్ ఆధారాలు మార్చే సదుపాయం: " : "* Developer environment credentials override: "}
-            <span className="font-mono bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 px-1 py-0.5 rounded">admin</span> / <span className="font-mono bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 px-1 py-0.5 rounded">password123</span>
+          {/* Quick instructions for base admin login */}
+          <div className="mt-6 pt-4 border-t border-slate-200/50 dark:border-slate-800 text-[10px] text-slate-400 font-sans leading-relaxed text-center space-y-1.5">
+            <div>
+              {language === "te" ? "* బేస్ అడ్మిన్ లాగిన్: " : "* Base Admin Credentials: "}
+              <span className="font-mono bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 px-1 py-0.5 rounded">admin</span> / <span className="font-mono bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 px-1 py-0.5 rounded">password123</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("admin");
+                setPassword("password123");
+              }}
+              className="text-[11px] font-bold text-amber-600 hover:underline cursor-pointer"
+            >
+              {language === "te" ? "డెమో వివరాలు నింపండి" : "Fill Demo Admin Credentials"}
+            </button>
           </div>
         </GlassCard>
       </div>
@@ -482,7 +704,27 @@ export const Admin: React.FC<AdminProps> = ({
             }`}
           >
             <Megaphone className="w-4 h-4" />
-            {language === "te" ? `వార్తలు & నోటీసులు (${data.announcements.length})` : `Announcements (${data.announcements.length})`}
+            {language === "te" ? `వార్తలు & నోటీసులు (${data.announcements.length})` : `News & Notices (${data.announcements.length})`}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("certificates")}
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+              activeTab === "certificates" ? "bg-gov-600 text-white" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/40"
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            {language === "te" ? `సర్టిఫికేట్లు & పత్రాలు (${certificates.length})` : `Documents & Certs (${certificates.length})`}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("schemes")}
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+              activeTab === "schemes" ? "bg-gov-600 text-white" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/40"
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            {language === "te" ? `ప్రభుత్వ పథకాలు (${schemes.length})` : `Govt Schemes (${schemes.length})`}
           </button>
 
           <button
@@ -527,25 +769,45 @@ export const Admin: React.FC<AdminProps> = ({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-4">
-                <Briefcase className="w-8 h-8 text-gov-600 shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-3">
+                <Briefcase className="w-7 h-7 text-gov-600 shrink-0" />
                 <div className="font-sans">
                   <span className="text-[10px] text-slate-400 block uppercase font-bold">
-                    {language === "te" ? "మొత్తం నమోదైన ఉద్యోగులు" : "Total Staff Registered"}
+                    {language === "te" ? "మొత్తం ఉద్యోగులు" : "Total Staff"}
                   </span>
-                  <span className="text-lg font-bold text-slate-900 dark:text-white">{data.staff.length} {language === "te" ? "మంది పౌర సేవకులు" : "Persons"}</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">{data.staff.length}</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-4">
-                <MessageSquare className="w-8 h-8 text-rose-600 shrink-0" />
+              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-3">
+                <FileText className="w-7 h-7 text-blue-600 shrink-0" />
                 <div className="font-sans">
                   <span className="text-[10px] text-slate-400 block uppercase font-bold">
-                    {language === "te" ? "పరిష్కరించని అర్జీలు" : "Unresolved Complaints"}
+                    {language === "te" ? "పత్రాలు & సర్టిఫికేట్లు" : "Document Guides"}
+                  </span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">{certificates.length}</span>
+                </div>
+              </div>
+
+              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-3">
+                <BookOpen className="w-7 h-7 text-emerald-600 shrink-0" />
+                <div className="font-sans">
+                  <span className="text-[10px] text-slate-400 block uppercase font-bold">
+                    {language === "te" ? "ప్రభుత్వ పథకాలు" : "Govt Schemes"}
+                  </span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">{schemes.length}</span>
+                </div>
+              </div>
+
+              <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl flex items-center gap-3">
+                <MessageSquare className="w-7 h-7 text-rose-600 shrink-0" />
+                <div className="font-sans">
+                  <span className="text-[10px] text-slate-400 block uppercase font-bold">
+                    {language === "te" ? "పెండింగ్ అర్జీలు" : "Open Tickets"}
                   </span>
                   <span className="text-lg font-bold text-slate-900 dark:text-white">
-                    {messages.filter(m => m.status !== "resolved").length} {language === "te" ? "టికెట్లు" : "Tickets"}
+                    {messages.filter(m => m.status !== "resolved").length}
                   </span>
                 </div>
               </div>
@@ -797,13 +1059,29 @@ export const Admin: React.FC<AdminProps> = ({
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={actionLoading}
-                  className="px-5 py-2.5 bg-gov-600 hover:bg-gov-700 text-white font-bold rounded-xl shadow-md cursor-pointer"
-                >
-                  {language === "te" ? "అధికారికంగా ప్రచురించండి" : "Publish Announcement"}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={actionLoading}
+                    className="px-5 py-2.5 bg-gov-600 hover:bg-gov-700 text-white font-bold rounded-xl shadow-md cursor-pointer"
+                  >
+                    {editingAnnId
+                      ? (language === "te" ? "మార్పులు సేవ్ చేయండి" : "Update Announcement")
+                      : (language === "te" ? "అధికారికంగా ప్రచురించండి" : "Publish Announcement")}
+                  </button>
+                  {editingAnnId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingAnnId(null);
+                        setNewAnn({ title: "", content: "", category: "General" });
+                      }}
+                      className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-xl cursor-pointer"
+                    >
+                      {language === "te" ? "రద్దు" : "Cancel"}
+                    </button>
+                  )}
+                </div>
               </form>
             </GlassCard>
 
@@ -820,12 +1098,432 @@ export const Admin: React.FC<AdminProps> = ({
                       <span className="text-[10px] text-slate-400 block mt-0.5">{ann.category} | {ann.date}</span>
                     </div>
 
-                    <button
-                      onClick={() => handleDeleteAnn(ann.id)}
-                      className="p-1 px-2.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer"
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        onClick={() => {
+                          setEditingAnnId(ann.id);
+                          setNewAnn({ title: ann.title, content: ann.content, category: ann.category });
+                        }}
+                        className="p-1 px-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-200 cursor-pointer"
+                        title="Edit"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteAnn(ann.id)}
+                        className="p-1 px-2.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
+        )}
+
+        {/* TAB 4B: CERTIFICATES & DOCUMENTS MANAGER */}
+        {activeTab === "certificates" && (
+          <div className="space-y-6">
+            <GlassCard hoverEffect={false}>
+              <form onSubmit={handleSaveCertificate} className="space-y-4 text-xs font-sans">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-800 uppercase tracking-wider">
+                  {editingCertId
+                    ? (language === "te" ? "సర్టిఫికేట్ గైడ్ సవరించండి" : "Edit Certificate / Document Guide")
+                    : (language === "te" ? "కొత్త సర్టిఫికేట్ / పత్రం గైడ్ జోడించండి" : "Add New Certificate / Document Guide")}
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Certificate Name (English) *</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Residence Certificate"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.name}
+                      onChange={(e) => setCertForm({ ...certForm, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Certificate Name (Telugu)</label>
+                    <input
+                      type="text"
+                      placeholder="ఉదా: నివాస ధృవీకరణ పత్రం"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.nameTe}
+                      onChange={(e) => setCertForm({ ...certForm, nameTe: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Category</label>
+                    <select
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.category}
+                      onChange={(e) => setCertForm({ ...certForm, category: e.target.value })}
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <option value="identity">Identity</option>
+                      <option value="welfare">Welfare</option>
+                      <option value="records">Records</option>
+                      <option value="revenue">Revenue</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Visibility Scope</label>
+                    <select
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.villageId}
+                      onChange={(e) => setCertForm({ ...certForm, villageId: e.target.value })}
+                    >
+                      <option value="all">All Villages (Statewide)</option>
+                      <option value={data.id}>Only {data.name}</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Processing Timeline</label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.processingTime}
+                      onChange={(e) => setCertForm({ ...certForm, processingTime: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Fee & Office</label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={certForm.fee}
+                      onChange={(e) => setCertForm({ ...certForm, fee: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Description (English) *</label>
+                    <textarea
+                      required
+                      rows={2}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={certForm.description}
+                      onChange={(e) => setCertForm({ ...certForm, description: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Description (Telugu)</label>
+                    <textarea
+                      rows={2}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={certForm.descriptionTe}
+                      onChange={(e) => setCertForm({ ...certForm, descriptionTe: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Required Documents (one per line or comma-separated)</label>
+                    <textarea
+                      rows={3}
+                      placeholder={"Aadhaar Card\nRation Card\nPassport Photo"}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={certForm.documents}
+                      onChange={(e) => setCertForm({ ...certForm, documents: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Application Steps (one per line)</label>
+                    <textarea
+                      rows={3}
+                      placeholder={"Visit Village Secretariat\nSubmit form with proofs\nVRO verification"}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={certForm.steps}
+                      onChange={(e) => setCertForm({ ...certForm, steps: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-500">Application Form URL (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                    value={certForm.downloadUrl}
+                    onChange={(e) => setCertForm({ ...certForm, downloadUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={actionLoading}
+                    className="px-5 py-2.5 bg-gov-600 hover:bg-gov-700 text-white font-bold rounded-xl shadow-md cursor-pointer"
+                  >
+                    {editingCertId ? "Update Certificate Guide" : "Save Certificate Guide"}
+                  </button>
+                  {editingCertId && (
+                    <button
+                      type="button"
+                      onClick={resetCertForm}
+                      className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-xl cursor-pointer"
+                    >
+                      Cancel
                     </button>
+                  )}
+                </div>
+              </form>
+            </GlassCard>
+
+            <GlassCard hoverEffect={false} className="p-4 font-sans text-xs">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">
+                Published Certificates & Document Guides ({certificates.length})
+              </h3>
+              <div className="space-y-3">
+                {certificates.map((cert) => (
+                  <div key={cert.id} className="flex justify-between items-start gap-4 p-3 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                      <h4 className="font-bold text-slate-950 dark:text-white">{cert.name}</h4>
+                      <p className="text-[11px] text-slate-500 mt-0.5">{cert.documents.length} required docs · {cert.category} · {cert.villageId === "all" ? "All Villages" : cert.villageId}</p>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        onClick={() => {
+                          setEditingCertId(cert.id);
+                          setCertForm({
+                            name: cert.name,
+                            nameTe: cert.nameTe || "",
+                            category: cert.category,
+                            description: cert.description,
+                            descriptionTe: cert.descriptionTe || "",
+                            documents: cert.documents.join("\n"),
+                            steps: cert.steps.join("\n"),
+                            processingTime: cert.processingTime || "7 - 15 Working Days",
+                            fee: cert.fee || "Nominal",
+                            officeLocation: cert.officeLocation || "Village Secretariat / MeeSeva",
+                            downloadUrl: cert.downloadUrl || "",
+                            villageId: cert.villageId || "all",
+                          });
+                        }}
+                        className="p-1 px-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg cursor-pointer"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCertificate(cert.id, cert.name)}
+                        className="p-1 px-2.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
+        )}
+
+        {/* TAB 4C: GOVERNMENT SCHEMES MANAGER */}
+        {activeTab === "schemes" && (
+          <div className="space-y-6">
+            <GlassCard hoverEffect={false}>
+              <form onSubmit={handleSaveScheme} className="space-y-4 text-xs font-sans">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-800 uppercase tracking-wider">
+                  {editingSchemeId ? "Edit Government Scheme" : "Add New Government Welfare Scheme"}
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Scheme Name (English) *</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. NTR Housing Scheme"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={schemeForm.name}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Scheme Name (Telugu)</label>
+                    <input
+                      type="text"
+                      placeholder="ఉదా: ఎన్టీఆర్ గృహ నిర్మాణ పథకం"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={schemeForm.nameTe}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, nameTe: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Category</label>
+                    <select
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={schemeForm.category}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, category: e.target.value })}
+                    >
+                      <option value="Welfare">Welfare</option>
+                      <option value="Pension">Pension</option>
+                      <option value="Agriculture">Agriculture</option>
+                      <option value="Education">Education</option>
+                      <option value="Food">Food</option>
+                      <option value="Housing">Housing</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Visibility Scope</label>
+                    <select
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                      value={schemeForm.villageId}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, villageId: e.target.value })}
+                    >
+                      <option value="all">All Villages (Statewide)</option>
+                      <option value={data.id}>Only {data.name}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Benefits (English)</label>
+                    <textarea
+                      rows={2}
+                      placeholder="Financial support or service benefits..."
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.benefits}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, benefits: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Benefits (Telugu)</label>
+                    <textarea
+                      rows={2}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.benefitsTe}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, benefitsTe: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Eligibility Criteria (English) *</label>
+                    <textarea
+                      required
+                      rows={2}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.eligibility}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, eligibility: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Eligibility Criteria (Telugu)</label>
+                    <textarea
+                      rows={2}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.eligibilityTe}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, eligibilityTe: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">Required Documents (one per line or comma-separated)</label>
+                    <textarea
+                      rows={3}
+                      placeholder={"Aadhaar Card\nRice Card\nBank Passbook"}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.documents}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, documents: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-500">How to Apply Steps (one per line)</label>
+                    <textarea
+                      rows={3}
+                      placeholder={"Meet Ward Welfare Assistant\nSubmit e-KYC and proofs"}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white resize-none"
+                      value={schemeForm.steps}
+                      onChange={(e) => setSchemeForm({ ...schemeForm, steps: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-500">Official Portal URL (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-xl dark:text-white"
+                    value={schemeForm.officialUrl}
+                    onChange={(e) => setSchemeForm({ ...schemeForm, officialUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={actionLoading}
+                    className="px-5 py-2.5 bg-gov-600 hover:bg-gov-700 text-white font-bold rounded-xl shadow-md cursor-pointer"
+                  >
+                    {editingSchemeId ? "Update Scheme" : "Publish Scheme"}
+                  </button>
+                  {editingSchemeId && (
+                    <button
+                      type="button"
+                      onClick={resetSchemeForm}
+                      className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-xl cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+            </GlassCard>
+
+            <GlassCard hoverEffect={false} className="p-4 font-sans text-xs">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">
+                Active Government Schemes ({schemes.length})
+              </h3>
+              <div className="space-y-3">
+                {schemes.map((scheme) => (
+                  <div key={scheme.id} className="flex justify-between items-start gap-4 p-3 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                      <h4 className="font-bold text-slate-950 dark:text-white">{scheme.name}</h4>
+                      <p className="text-[11px] text-slate-500 mt-0.5">{scheme.category} · {scheme.documents?.length || 0} required docs · {scheme.villageId === "all" ? "All Villages" : scheme.villageId}</p>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        onClick={() => {
+                          setEditingSchemeId(scheme.id);
+                          setSchemeForm({
+                            name: scheme.name,
+                            nameTe: scheme.nameTe || "",
+                            category: scheme.category,
+                            benefits: scheme.benefits || "",
+                            benefitsTe: scheme.benefitsTe || "",
+                            eligibility: scheme.eligibility,
+                            eligibilityTe: scheme.eligibilityTe || "",
+                            documents: (scheme.documents || []).join("\n"),
+                            steps: (scheme.steps || []).join("\n"),
+                            officialUrl: scheme.officialUrl || "",
+                            villageId: scheme.villageId || "all",
+                          });
+                        }}
+                        className="p-1 px-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg cursor-pointer"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteScheme(scheme.id, scheme.name)}
+                        className="p-1 px-2.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -957,6 +1655,19 @@ export const Admin: React.FC<AdminProps> = ({
                     <p className="text-[13px] bg-white dark:bg-slate-900 p-3 rounded-xl leading-relaxed text-slate-700 dark:text-slate-450">
                       {msg.message}
                     </p>
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase">
+                        {language === "te" ? "సచివాలయ అధికారి స్పందన / రిమార్క్స్" : "Official Sachivalayam Reply / Remarks"}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={language === "te" ? "పౌరుడికి చూపించే సమాధానం రాయండి..." : "Write status update or instructions visible to citizen..."}
+                        value={remarksDrafts[msg.id] ?? msg.adminRemarks ?? ""}
+                        onChange={(e) => setRemarksDrafts((prev) => ({ ...prev, [msg.id]: e.target.value }))}
+                        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs dark:text-white"
+                      />
+                    </div>
 
                     <div className="flex justify-end gap-2 text-[11px] font-bold">
                       {msg.status === "unread" && (

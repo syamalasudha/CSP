@@ -10,8 +10,9 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ToastContainer, Toast, GlassCard } from "./components/UIComponents";
 import { VillageSelector, VillageInfo } from "./components/VillageSelector";
-import { DatabaseSchema } from "./types";
+import { DatabaseSchema, PortalUser } from "./types";
 import { Certificates } from "./pages/Certificates";
+import { CitizenPortal } from "./pages/CitizenPortal";
 
 // Import modular pages
 import { Home } from "./pages/Home";
@@ -44,6 +45,17 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useState<string | null>(() => {
     return localStorage.getItem("vendra-portal-admin-token");
+  });
+  const [citizenToken, setCitizenToken] = useState<string | null>(() => {
+    return localStorage.getItem("csp-portal-citizen-token");
+  });
+  const [citizenUser, setCitizenUser] = useState<PortalUser | null>(() => {
+    try {
+      const saved = localStorage.getItem("csp-portal-citizen-user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -78,7 +90,7 @@ export default function App() {
   useEffect(() => {
     const supportedPages = [
       "home", "about", "admin-details", "staff",
-      "citizen-services", "agriculture", "welfare",
+      "citizen-services", "citizen-portal", "agriculture", "welfare",
       "voters", "gallery", "contact", "admin",
     ];
     const handleHashChange = () => {
@@ -125,6 +137,42 @@ export default function App() {
     }
   }, [selectedVillage]);
 
+  // Verify saved admin & citizen tokens on startup so expired JWTs are cleared automatically
+  useEffect(() => {
+    if (adminToken) {
+      fetch(apiUrl("/api/auth/verify"), {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      })
+        .then((res) => {
+          if (res.status === 401 || res.status === 403) {
+            setAdminToken(null);
+            localStorage.removeItem("vendra-portal-admin-token");
+          }
+        })
+        .catch(() => {});
+    }
+    if (citizenToken) {
+      fetch(apiUrl("/api/auth/verify"), {
+        headers: { Authorization: `Bearer ${citizenToken}` },
+      })
+        .then(async (res) => {
+          if (res.status === 401 || res.status === 403) {
+            setCitizenToken(null);
+            setCitizenUser(null);
+            localStorage.removeItem("csp-portal-citizen-token");
+            localStorage.removeItem("csp-portal-citizen-user");
+          } else if (res.ok) {
+            const json = await res.json();
+            if (json.user) {
+              setCitizenUser(json.user);
+              localStorage.setItem("csp-portal-citizen-user", JSON.stringify(json.user));
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   const handleAdminLogin = (token: string) => {
     setAdminToken(token);
     localStorage.setItem("vendra-portal-admin-token", token);
@@ -136,6 +184,51 @@ export default function App() {
     addToast("info", "Admin session dismissed successfully.");
     setActivePage("home");
     window.location.hash = "home";
+  };
+
+  const handleCitizenLogin = (token: string, user: PortalUser) => {
+    setCitizenToken(token);
+    setCitizenUser(user);
+    localStorage.setItem("csp-portal-citizen-token", token);
+    localStorage.setItem("csp-portal-citizen-user", JSON.stringify(user));
+  };
+
+  const handleCitizenLogout = () => {
+    setCitizenToken(null);
+    setCitizenUser(null);
+    localStorage.removeItem("csp-portal-citizen-token");
+    localStorage.removeItem("csp-portal-citizen-user");
+    addToast("info", "Citizen logged out successfully.");
+    setActivePage("home");
+    window.location.hash = "home";
+  };
+
+  const handleToggleBookmark = async (type: "certificate" | "scheme", itemId: string) => {
+    if (!citizenToken) {
+      addToast("info", "Please sign in to your Citizen Account to save checklists.");
+      setActivePage("citizen-portal");
+      window.location.hash = "citizen-portal";
+      return;
+    }
+    try {
+      const res = await fetch(apiUrl("/api/citizen/bookmarks"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${citizenToken}`,
+        },
+        body: JSON.stringify({ type, itemId }),
+      });
+      if (!res.ok) throw new Error("Could not update saved checklist");
+      const json = await res.json();
+      if (json.user) {
+        setCitizenUser(json.user);
+        localStorage.setItem("csp-portal-citizen-user", JSON.stringify(json.user));
+      }
+      addToast("success", json.saved ? "Saved to your Citizen Checklist!" : "Removed from your Citizen Checklist.");
+    } catch (err) {
+      addToast("error", err instanceof Error ? err.message : "Failed updating checklist.");
+    }
   };
 
   const renderActivePage = () => {
@@ -169,7 +262,31 @@ export default function App() {
           />
         );
       case "citizen-services":
-        return <Certificates />;
+        return (
+          <Certificates
+            villageId={portalData.id}
+            savedCertificates={citizenUser?.savedCertificates || []}
+            savedSchemes={citizenUser?.savedSchemes || []}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        );
+      case "citizen-portal":
+        return (
+          <CitizenPortal
+            data={portalData}
+            token={citizenToken}
+            user={citizenUser}
+            onLoginSuccess={handleCitizenLogin}
+            onLogout={handleCitizenLogout}
+            onToggleBookmark={handleToggleBookmark}
+            onNavigate={(p) => {
+              setActivePage(p);
+              window.location.hash = p;
+            }}
+            onToastSuccess={(m) => addToast("success", m)}
+            onToastError={(m) => addToast("error", m)}
+          />
+        );
       case "agriculture":
         return <Infrastructure data={portalData} />;
       case "welfare":
@@ -182,6 +299,8 @@ export default function App() {
         return (
           <Contact
             data={portalData}
+            citizenToken={citizenToken}
+            citizenUser={citizenUser}
             onSuccess={(m) => addToast("success", m)}
             onError={(m) => addToast("error", m)}
             onNavigateHome={() => {
@@ -224,7 +343,10 @@ export default function App() {
             activePage={activePage}
             setActivePage={setActivePage}
             isAdminLoggedIn={!!adminToken}
+            isCitizenLoggedIn={!!citizenToken && !!citizenUser}
+            citizenName={citizenUser?.fullName}
             onLogout={handleAdminLogout}
+            onCitizenLogout={handleCitizenLogout}
             selectedVillage={selectedVillage}
             onSwitchVillage={handleSwitchVillage}
           />

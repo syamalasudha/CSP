@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { GlassCard, AnimatedCounter } from "../components/UIComponents";
 import { useLanguage } from "../components/LanguageContext";
-import { Users, Trees, Home as HomeIcon, Map, ShieldCheck, Zap, Megaphone, ArrowRight, Landmark } from "lucide-react";
+import { Users, Trees, Home as HomeIcon, Map, Megaphone, ArrowRight, Landmark, Search } from "lucide-react";
 import { DatabaseSchema } from "../types";
 
 interface HomeProps {
@@ -16,7 +16,21 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
   const { language, t } = useLanguage();
-  const recentAnnouncements = data.announcements.slice(0, 3);
+  const [showAllNotices, setShowAllNotices] = useState(false);
+  const [noticeCategory, setNoticeCategory] = useState("All");
+  const [noticeSearch, setNoticeSearch] = useState("");
+
+  const filteredAnnouncements = data.announcements.filter((ann) => {
+    const matchesCat = noticeCategory === "All" || ann.category === noticeCategory;
+    const q = noticeSearch.trim().toLowerCase();
+    const matchesQuery =
+      !q || ann.title.toLowerCase().includes(q) || ann.content.toLowerCase().includes(q);
+    return matchesCat && matchesQuery;
+  });
+
+  const recentAnnouncements = showAllNotices
+    ? filteredAnnouncements
+    : filteredAnnouncements.slice(0, 3);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -87,7 +101,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
             <Users className="w-6 h-6" />
           </div>
           <span className="text-3xl md:text-4xl font-display font-black text-slate-900 dark:text-white">
-            <AnimatedCounter end={data.stats.population} />
+            {data.stats?.population != null ? <AnimatedCounter end={data.stats.population} /> : "—"}
           </span>
           <span className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1 uppercase tracking-wider">
             {t("stats_population")}
@@ -99,7 +113,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
             <Trees className="w-6 h-6" />
           </div>
           <span className="text-3xl md:text-4xl font-display font-black text-slate-900 dark:text-white">
-            <AnimatedCounter end={data.stats.areaSqKm} suffix=" Km²" decimal={true} />
+            {data.stats?.areaSqKm != null ? <AnimatedCounter end={data.stats.areaSqKm} suffix=" Km²" decimal={true} /> : "—"}
           </span>
           <span className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1 uppercase tracking-wider">
             {t("stats_area")}
@@ -111,7 +125,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
             <HomeIcon className="w-6 h-6" />
           </div>
           <span className="text-3xl md:text-4xl font-display font-black text-slate-900 dark:text-white">
-            <AnimatedCounter end={data.stats.totalHouseholds} />
+            {data.stats?.totalHouseholds != null ? <AnimatedCounter end={data.stats.totalHouseholds} /> : "—"}
           </span>
           <span className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1 uppercase tracking-wider">
             {t("stats_households")}
@@ -123,7 +137,7 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
             <Map className="w-6 h-6" />
           </div>
           <span className="text-3xl md:text-4xl font-display font-black text-slate-900 dark:text-white">
-            <AnimatedCounter end={data.stats.totalWards} />
+            {data.stats?.totalWards != null ? <AnimatedCounter end={data.stats.totalWards} /> : "—"}
           </span>
           <span className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1 uppercase tracking-wider">
             {t("stats_wards")}
@@ -135,12 +149,59 @@ export const Home: React.FC<HomeProps> = ({ data, onNavigate }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Notices and Announcements Board */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center gap-2.5">
-            <Megaphone className="w-5 h-5 text-gov-600 shrink-0 animate-bounce" />
-            <h2 className="text-xl md:text-2xl font-display font-bold text-slate-900 dark:text-white">
-              {t("home_announcements_title")}
-            </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <Megaphone className="w-5 h-5 text-gov-600 shrink-0 animate-bounce" />
+              <h2 className="text-xl md:text-2xl font-display font-bold text-slate-900 dark:text-white">
+                {t("home_announcements_title")}
+              </h2>
+            </div>
+
+            {data.announcements.length > 0 && (
+              <button
+                onClick={() => setShowAllNotices((v) => !v)}
+                className="text-xs font-bold text-gov-600 dark:text-gov-400 hover:underline cursor-pointer self-start sm:self-auto"
+              >
+                {showAllNotices
+                  ? language === "te"
+                    ? "తాజావి మాత్రమే చూపు"
+                    : "Show Top 3"
+                  : language === "te"
+                  ? `అన్ని నోటీసులు చూడండి (${data.announcements.length})`
+                  : `View All Notices (${data.announcements.length})`}
+              </button>
+            )}
           </div>
+
+          {showAllNotices && (
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={noticeSearch}
+                  onChange={(e) => setNoticeSearch(e.target.value)}
+                  placeholder={language === "te" ? "నోటీసులను వెతకండి..." : "Search notices..."}
+                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl dark:text-white"
+                />
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {["All", "General", "Welfare", "Meeting", "Alert"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setNoticeCategory(cat)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border cursor-pointer ${
+                      noticeCategory === cat
+                        ? "bg-gov-600 text-white border-transparent"
+                        : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-4">
             {recentAnnouncements.length > 0 ? (

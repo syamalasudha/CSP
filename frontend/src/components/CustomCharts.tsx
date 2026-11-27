@@ -18,16 +18,25 @@ interface VoterDonutProps {
 export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female, bc, sc, st }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const totalGender = male + female;
-  const categories = [
-    { name: "Male Voters", value: male, color: "bg-gov-600", stroke: "#059669" },
-    { name: "Female Voters", value: female, color: "bg-emerald-400", stroke: "#34d399" },
-    { name: "SC Voters", value: sc, color: "bg-teal-500", stroke: "#14b8a6" },
-    { name: "BC Voters", value: bc, color: "bg-cyan-500", stroke: "#06b6d4" },
-    { name: "ST Voters", value: st, color: "bg-emerald-700", stroke: "#047857" },
+  const safeMale = male || 0;
+  const safeFemale = female || 0;
+  const safeSc = sc || 0;
+  const safeBc = bc || 0;
+  const safeSt = st || 0;
+
+  // Donut represents mutually exclusive gender distribution to avoid double-counting social categories
+  const genderCategories = [
+    { name: "Male Voters", value: safeMale, color: "bg-gov-600", stroke: "#059669" },
+    { name: "Female Voters", value: safeFemale, color: "bg-emerald-400", stroke: "#34d399" },
   ];
 
-  const total = male + female + bc + sc + st;
+  const socialCategories = [
+    { name: "SC Voters", value: safeSc, color: "bg-teal-500" },
+    { name: "BC Voters", value: safeBc, color: "bg-cyan-500" },
+    { name: "ST Voters", value: safeSt, color: "bg-emerald-700" },
+  ];
+
+  const totalGender = safeMale + safeFemale;
 
   // Simple clean SVG calculations
   const radius = 60;
@@ -42,7 +51,7 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
           Voter Demographics
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-          {`Distribution statistics across ${total} registered voters`}
+          {`Distribution statistics across ${totalGender} electors (gender & social categories)`}
         </p>
       </div>
 
@@ -51,8 +60,8 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
         <div className="relative flex justify-center items-center h-48">
           <svg width="180" height="180" viewBox="0 0 180 180" className="transform -rotate-90">
             <circle cx="90" cy="90" r={radius} fill="transparent" stroke="#f1f5f9" strokeWidth={strokeWidth} className="dark:stroke-slate-800" />
-            {categories.map((cat, i) => {
-              const fraction = cat.value / total;
+            {totalGender > 0 && genderCategories.map((cat, i) => {
+              const fraction = cat.value / totalGender;
               const strokeDasharray = `${fraction * circumference} ${circumference}`;
               const strokeDashoffset = -accumulatedAngle;
               accumulatedAngle += fraction * circumference;
@@ -81,18 +90,18 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
           {/* Central tooltip */}
           <div className="absolute flex flex-col items-center text-center">
             <span className="text-2xl font-display font-black text-slate-800 dark:text-white">
-              {hoveredIndex !== null ? categories[hoveredIndex].value : total}
+              {hoveredIndex !== null ? genderCategories[hoveredIndex].value : totalGender}
             </span>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
-              {hoveredIndex !== null ? categories[hoveredIndex].name : "Total Voters"}
+              {hoveredIndex !== null ? genderCategories[hoveredIndex].name : "Total Electors"}
             </span>
           </div>
         </div>
 
         {/* Legend list */}
-        <div className="space-y-2.5">
-          {categories.map((cat, i) => {
-            const perc = total > 0 ? ((cat.value / total) * 100).toFixed(1) : "0.0";
+        <div className="space-y-2">
+          {genderCategories.map((cat, i) => {
+            const perc = totalGender > 0 ? ((cat.value / totalGender) * 100).toFixed(1) : "0.0";
             return (
               <div
                 key={cat.name}
@@ -108,12 +117,28 @@ export const VoterDistributionDonut: React.FC<VoterDonutProps> = ({ male, female
                     {cat.name}
                   </span>
                 </div>
-                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-white text-right">
-                    {cat.value} <span className="text-[10px] text-slate-400">({perc}%)</span>
-                  </span>
+                <span className="text-xs font-mono font-bold text-slate-900 dark:text-white text-right">
+                  {cat.value} <span className="text-[10px] text-slate-400">({perc}%)</span>
+                </span>
               </div>
             );
           })}
+
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-2 mt-2 space-y-1.5">
+            {socialCategories.map((cat) => (
+              <div key={cat.name} className="flex justify-between items-center px-2 py-1">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-full ${cat.color} shrink-0`} />
+                  <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                    {cat.name}
+                  </span>
+                </div>
+                <span className="text-xs font-mono font-bold text-slate-900 dark:text-white">
+                  {cat.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </GlassCard>
@@ -142,13 +167,14 @@ export const LandAllocationAcreBar: React.FC<LandBarProps> = ({
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  const safeTotal = total || 0;
   const landRows = [
-    { label: "Wet Cultivated Land", value: wet, color: "bg-emerald-500", rawColor: "#10b981", desc: "Rice paddy and sugar cane fields" },
-    { label: "Public Commons", value: publicCommon, color: "bg-blue-500", rawColor: "#3b82f6", desc: "Common grazing ground, village pathways" },
-    { label: "Endowments Land", value: endowments, color: "bg-amber-500", rawColor: "#f59e0b", desc: "Temple and local trust holdings" },
-    { label: "Fisheries (Water Ponds)", value: fisheries, color: "bg-sky-400", rawColor: "#38bdf8", desc: "Freshwater aquaculture leases" },
-    { label: "Assigned Lands", value: assigned, color: "bg-indigo-500", rawColor: "#6366f1", desc: "Distributed to landless SC/ST families" },
-    { label: "Dry Uplands Land", value: dry, color: "bg-amber-700", rawColor: "#b45309", desc: "Coarse grain / non-irrigated dry fields" },
+    { label: "Wet Cultivated Land", value: wet || 0, color: "bg-emerald-500", rawColor: "#10b981", desc: "Rice paddy and sugar cane fields" },
+    { label: "Public Commons", value: publicCommon || 0, color: "bg-blue-500", rawColor: "#3b82f6", desc: "Common grazing ground, village pathways" },
+    { label: "Endowments Land", value: endowments || 0, color: "bg-amber-500", rawColor: "#f59e0b", desc: "Temple and local trust holdings" },
+    { label: "Fisheries (Water Ponds)", value: fisheries || 0, color: "bg-sky-400", rawColor: "#38bdf8", desc: "Freshwater aquaculture leases" },
+    { label: "Assigned Lands", value: assigned || 0, color: "bg-indigo-500", rawColor: "#6366f1", desc: "Distributed to landless SC/ST families" },
+    { label: "Dry Uplands Land", value: dry || 0, color: "bg-amber-700", rawColor: "#b45309", desc: "Coarse grain / non-irrigated dry fields" },
   ];
 
   return (
@@ -158,13 +184,13 @@ export const LandAllocationAcreBar: React.FC<LandBarProps> = ({
           Land Classification
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-          Acreage allocation of the Gram Panchayat out of {total} Acres
+          Acreage allocation of the Gram Panchayat out of {safeTotal} Acres
         </p>
       </div>
 
       <div className="space-y-4">
         {landRows.map((row, index) => {
-          const percentage = ((row.value / total) * 100).toFixed(1);
+          const percentage = safeTotal > 0 ? ((row.value / safeTotal) * 100).toFixed(1) : "0.0";
           const isHovered = hoveredIndex === index;
 
           return (
@@ -234,18 +260,18 @@ export const PensionStructureBar: React.FC<PensionsProps> = ({
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
   const pensionBlocks = [
-    { label: "OAP (Old Age)", count: oap, color: "bg-emerald-500" },
-    { label: "Widow Pension", count: widow, color: "bg-teal-500" },
-    { label: "Senior Artists", count: artists, color: "bg-indigo-500" },
-    { label: "Disabled", count: disabled, color: "bg-rose-500" },
-    { label: "ABH Group", count: abh, color: "bg-sky-400" },
-    { label: "Toddy Tappers", count: tTappers, color: "bg-amber-600" },
-    { label: "Cobblers", count: cobbler, color: "bg-orange-500" },
-    { label: "DMHO Health", count: dmho, color: "bg-blue-500" },
-    { label: "Single Women", count: singleWomen, color: "bg-pink-500" },
+    { label: "OAP (Old Age)", count: oap || 0, color: "bg-emerald-500" },
+    { label: "Widow Pension", count: widow || 0, color: "bg-teal-500" },
+    { label: "Senior Artists", count: artists || 0, color: "bg-indigo-500" },
+    { label: "Disabled", count: disabled || 0, color: "bg-rose-500" },
+    { label: "ABH Group", count: abh || 0, color: "bg-sky-400" },
+    { label: "Toddy Tappers", count: tTappers || 0, color: "bg-amber-600" },
+    { label: "Cobblers", count: cobbler || 0, color: "bg-orange-500" },
+    { label: "DMHO Health", count: dmho || 0, color: "bg-blue-500" },
+    { label: "Single Women", count: singleWomen || 0, color: "bg-pink-500" },
   ];
 
-  const maxVal = Math.max(...pensionBlocks.map((b) => b.count));
+  const maxVal = Math.max(...pensionBlocks.map((b) => b.count), 0);
 
   return (
     <GlassCard className="h-full">
@@ -254,7 +280,7 @@ export const PensionStructureBar: React.FC<PensionsProps> = ({
           Welfare Beneficiaries
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          State pension distribution segments covering all {total} active beneficiaries in the village
+          State pension distribution segments covering all {total || 0} active beneficiaries in the village
         </p>
       </div>
 
@@ -263,7 +289,7 @@ export const PensionStructureBar: React.FC<PensionsProps> = ({
         {/* Interactive Bar Pillars */}
         <div className="flex-1 w-full h-56 flex items-end justify-between gap-1.5 sm:gap-3 bg-slate-50/50 dark:bg-slate-900/20 p-4 border border-slate-100 dark:border-slate-800/20 rounded-xl relative">
           {pensionBlocks.map((block, index) => {
-            const heightPerc = ((block.count / maxVal) * 100).toFixed(1);
+            const heightPerc = maxVal > 0 ? ((block.count / maxVal) * 100).toFixed(1) : "0";
             const isHovered = hoveredBar === index;
 
             return (
